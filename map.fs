@@ -37,15 +37,14 @@ variable game-map map-tiles allot
 
 : render-map ( -- )
     map-tiles 0 do
-        bl                  ( ch )
-        i map-width /mod    ( ch x y )
-        game-map i + c@     ( ch x y tile )
+        i map-width /mod    ( x y )
+        game-map i + c@     ( x y tile )
         TILE_BLOCKED and if
             dark-wall
         else
             dark-ground
         then
-        plot
+        plot-attr
     loop
 ;
 
@@ -140,6 +139,6 @@ variable game-map map-tiles allot
     dup rect@ rect-centre
     player entity-y !
     player entity-x !
-    
+
     free throw
 ;

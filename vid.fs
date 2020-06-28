@@ -20,34 +20,36 @@ variable vidbuf-dirty   vidbuf-size allot
     chars vidbuf-dirty +
 ;
 
-: plot ( ch x y attr -- )
-    \ TODO: rearrange arguments?
-    >r                      ( ch x y )
-    screen-offset           ( ch offset )
+: plot-attr { x y attr -- }
+    attr x y screen-offset dup  ( attr offset offset )
 
-    dup vidbuf-attr-offset  ( ch offset addr )
-    @ r@ <> if              ( ch offset )
-        r>                  ( ch offset attr )
-        over                ( ch offset attr offset )
-        vidbuf-attr-offset  ( ch offset attr addr )
-        !                   ( ch offset )
-        true over           ( ch offset true offset )
-        vidbuf-dirty-offset c!
+    vidbuf-attr-offset dup @    ( attr offset addr old-attr )
+    attr <> if
+        true rot                ( attr addr true offset )
+        vidbuf-dirty-offset c!  ( attr addr )
+        !
     else
-        rdrop
-    then                    ( ch offset )
-
-    over                    ( ch offset ch )
-    over vidbuf-ch-offset   ( ch offset ch addr )
-    c@ <> if                ( ch offset )
-        tuck                ( offset ch offset )
-        vidbuf-ch-offset    ( offset ch addr )
-        c!                  ( offset )
-        true swap           ( true offset )
-        vidbuf-dirty-offset c!
-    else
-        2drop
+        2drop drop
     then
+;
+
+: plot-char { x y ch -- }
+    ch 0= if exit then
+    ch x y screen-offset dup    ( ch offset offset )
+
+    vidbuf-ch-offset dup c@     ( ch offset addr old-ch )
+    ch <> if
+        true rot                ( ch addr true offset )
+        vidbuf-dirty-offset c!  ( ch addr )
+        c!
+    else
+        2drop drop
+    then
+;
+
+: plot { ch x y attr -- }
+    x y attr plot-attr
+    x y ch plot-char
 ;
 
 : present-offset ( offset -- )

@@ -44,8 +44,8 @@ new-entity
 : mainloop ( -- )
     haltgame off
     begin
-        render-map
         draw-all-entities
+        render-map
         present
 
         0 0 at-xy
