@@ -19,16 +19,10 @@ variable game-map map-tiles allot
 ;
 
 : map-passable ( x y -- flag )
-    over 0< if
+    dup 0 map-height within 0= if
         2drop 0 exit
     then
-    over map-width >= if
-        2drop 0 exit
-    then
-    dup 0< if
-        2drop 0 exit
-    then
-    dup map-height >= if
+    over 0 map-width within 0= if
         2drop 0 exit
     then
 
@@ -97,8 +91,8 @@ variable game-map map-tiles allot
 : generate-room { rects numrects min-size max-size -- rects numrects }
     min-size max-size randint to gen-w
     min-size max-size randint to gen-h
-    0 map-width gen-w - 1- randint
-    0 map-height gen-h - 1- randint
+    0 map-width gen-w - randint
+    0 map-height gen-h - randint
     gen-w gen-h rect-convert
     to gen-y2 to gen-x2 to gen-y1 to gen-x1
 

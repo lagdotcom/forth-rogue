@@ -1,4 +1,4 @@
-form * constant vidbuf-size
+form 1- * constant vidbuf-size
 
 variable vidbuf-attr    vidbuf-size cells allot
 variable vidbuf-ch      vidbuf-size allot
