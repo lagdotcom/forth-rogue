@@ -1,6 +1,8 @@
+include utils.fs
 include vid.fs
-include map.fs
+include rect.fs
 include entity.fs
+include map.fs
 
 27 constant k-esc
 
@@ -8,15 +10,8 @@ variable haltgame
 
 create player
     <A White >FG A>
-    map-height 2 /
-    map-width 2 /
-    '@'
-new-entity
-
-create npc
-    <A Yellow >FG A>
-    map-height 2 /
-    map-width 2 / 5 -
+    0
+    0
     '@'
 new-entity
 
@@ -59,7 +54,7 @@ new-entity
 ;
 
 vid-clear
-npc add-entity
+player 6 10 30 generate-map
 player add-entity
 
 mainloop
