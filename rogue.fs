@@ -8,15 +8,15 @@ variable haltgame
 
 create player
     <A White >FG A>
-    rows 2 /
-    cols 2 /
+    map-height 2 /
+    map-width 2 /
     '@'
 new-entity
 
 create npc
     <A Yellow >FG A>
-    rows 2 /
-    cols 2 / 5 -
+    map-height 2 /
+    map-width 2 / 5 -
     '@'
 new-entity
 
@@ -25,7 +25,6 @@ new-entity
     player entity-y @ +         ( mx my mx y )
     player entity-x @ under+    ( mx my x y )
     map-passable
-    \ 0 32 at-xy .s
     if
         player clear-entity
         player move-entity
@@ -52,12 +51,14 @@ new-entity
     begin
         render-map
         draw-all-entities
+        present
+
         0 0 at-xy
         process-input
     haltgame @ until
 ;
 
-page
+vid-clear
 npc add-entity
 player add-entity
 
