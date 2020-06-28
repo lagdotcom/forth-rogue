@@ -1,23 +1,23 @@
-form * constant buffer-size
+form * constant vidbuf-size
 
-variable buffer-attr    buffer-size cells allot
-variable buffer-ch      buffer-size allot
-variable buffer-dirty   buffer-size allot
+variable vidbuf-attr    vidbuf-size cells allot
+variable vidbuf-ch      vidbuf-size allot
+variable vidbuf-dirty   vidbuf-size allot
 
 : screen-offset ( x y -- offset )
     cols * +
 ;
 
-: buffer-attr-offset ( offset -- addr )
-    cells buffer-attr +
+: vidbuf-attr-offset ( offset -- addr )
+    cells vidbuf-attr +
 ;
 
-: buffer-ch-offset ( offset -- addr )
-    chars buffer-ch +
+: vidbuf-ch-offset ( offset -- addr )
+    chars vidbuf-ch +
 ;
 
-: buffer-dirty-offset ( offset -- addr )
-    chars buffer-dirty +
+: vidbuf-dirty-offset ( offset -- addr )
+    chars vidbuf-dirty +
 ;
 
 : plot ( ch x y attr -- )
@@ -25,26 +25,26 @@ variable buffer-dirty   buffer-size allot
     >r                      ( ch x y )
     screen-offset           ( ch offset )
 
-    dup buffer-attr-offset  ( ch offset addr )
+    dup vidbuf-attr-offset  ( ch offset addr )
     @ r@ <> if              ( ch offset )
         r>                  ( ch offset attr )
         over                ( ch offset attr offset )
-        buffer-attr-offset  ( ch offset attr addr )
+        vidbuf-attr-offset  ( ch offset attr addr )
         !                   ( ch offset )
         true over           ( ch offset true offset )
-        buffer-dirty-offset c!
+        vidbuf-dirty-offset c!
     else
         rdrop
     then                    ( ch offset )
 
     over                    ( ch offset ch )
-    over buffer-ch-offset   ( ch offset ch addr )
+    over vidbuf-ch-offset   ( ch offset ch addr )
     c@ <> if                ( ch offset )
         tuck                ( offset ch offset )
-        buffer-ch-offset    ( offset ch addr )
+        vidbuf-ch-offset    ( offset ch addr )
         c!                  ( offset )
         true swap           ( true offset )
-        buffer-dirty-offset c!
+        vidbuf-dirty-offset c!
     else
         2drop
     then
@@ -52,21 +52,21 @@ variable buffer-dirty   buffer-size allot
 
 : present-offset ( offset -- )
     dup cols /mod at-xy
-    dup buffer-attr-offset @ attr!
-        buffer-ch-offset c@ emit
+    dup vidbuf-attr-offset @ attr!
+        vidbuf-ch-offset c@ emit
 ;
 
 : present ( -- )
-    buffer-size 0 do
-        buffer-dirty i + c@ if
-            false i buffer-dirty-offset c!
+    vidbuf-size 0 do
+        vidbuf-dirty i + c@ if
+            false i vidbuf-dirty-offset c!
             i present-offset
         then
     loop
 ;
 
 : vid-clear ( -- )
-    buffer-attr     buffer-size cells 0 fill
-    buffer-ch       buffer-size chars bl fill
-    buffer-dirty    buffer-size chars true fill
+    vidbuf-attr     vidbuf-size cells 0 fill
+    vidbuf-ch       vidbuf-size chars bl fill
+    vidbuf-dirty    vidbuf-size chars true fill
 ;
