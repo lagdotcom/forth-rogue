@@ -10,7 +10,7 @@ rect% nip constant rect-size
     c, c, c, c,
 ;
 
-: rect-convert { x y w h -- x1 y1 x2 y2 )
+: rect-convert { x y w h -- x1 y1 x2 y2 }
     x
     y
     x w +
@@ -21,7 +21,7 @@ rect% nip constant rect-size
     rect-convert rect,
 ;
 
-: rect@ { rect -- x1 y1 x2 y2 )
+: rect@ { rect -- x1 y1 x2 y2 }
     rect rect-x1 c@
     rect rect-y1 c@
     rect rect-x2 c@
@@ -35,12 +35,12 @@ rect% nip constant rect-size
     y2 rect rect-y2 c!
 ;
 
-: rect-centre { x1 y1 x2 y2 -- x y )
+: rect-centre { x1 y1 x2 y2 -- x y }
     x1 x2 + 2 /
     y1 y2 + 2 /
 ;
 
-: rect-intersects { ax1 ay1 ax2 ay2 bx1 by1 bx2 by2 -- flag )
+: rect-intersects { ax1 ay1 ax2 ay2 bx1 by1 bx2 by2 -- flag }
     ax1 bx2 <=
     ax2 bx1 >= and
     ay1 by2 <= and
