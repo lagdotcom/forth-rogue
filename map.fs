@@ -59,9 +59,9 @@ variable game-map map-tiles allot
 
 : carve-h-tunnel { x1 x2 y -- }
     x1 x2 > if
-        x1 x2
+        x1 1+ x2
     else
-        x2 x1
+        x2 1+ x1
     then ?do
         0 i y map-offset c!
     loop
@@ -69,9 +69,9 @@ variable game-map map-tiles allot
 
 : carve-v-tunnel { y1 y2 x -- }
     y1 y2 > if
-        y1 y2
+        y1 1+ y2
     else
-        y2 y1
+        y2 1+ y1
     then ?do
         0 x i map-offset c!
     loop
