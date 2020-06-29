@@ -1,19 +1,11 @@
+include defs.fs
+include vars.fs
 include utils.fs
-include vid.fs
 include rect.fs
 include entity.fs
 include map.fs
-
-27 constant k-esc
-
-variable haltgame
-
-create player
-    <A White >FG A>
-    0
-    0
-    '@'
-new-entity
+include fov.fs
+include vid.fs
 
 : move-player ( mx my -- )
     over over                   ( mx my mx my )
@@ -23,6 +15,7 @@ new-entity
     if
         player clear-entity
         player move-entity
+        fov-recompute on
     else
         2drop
     then
@@ -44,16 +37,25 @@ new-entity
 : mainloop ( -- )
     haltgame off
     begin
-        draw-all-entities
+        fov-recompute if recompute-fov then
         render-map
+        fov-recompute off
+        draw-all-entities
         present
 
-        0 0 at-xy
-        process-input
+        player entity-x @
+        player entity-y @
+        at-xy process-input
     haltgame @ until
 ;
 
+player
+    '@' 0 0
+    <A White >FG A>
+entity!
+
 vid-clear
+fov-recompute on
 player 6 10 30 generate-map
 player add-entity
 

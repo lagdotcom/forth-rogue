@@ -1,15 +1,3 @@
-1 constant TILE_BLOCKED
-2 constant TILE_OPAQUE
-
-60 constant map-width
-30 constant map-height
-map-width map-height * constant map-tiles
-
-<A Blue >BG A>          constant dark-wall
-<A Blue >BG Blink A>    constant dark-ground
-
-variable game-map map-tiles allot
-
 : fill-map ( tile )
     >r game-map map-tiles r> fill
 ;
@@ -18,28 +6,19 @@ variable game-map map-tiles allot
     map-width * game-map + +
 ;
 
-: map-passable ( x y -- flag )
-    dup 0 map-height within 0= if
-        2drop 0 exit
+: map-contains ( x y -- flag )
+    0 map-height within 0= if
+        drop false exit
     then
-    over 0 map-width within 0= if
-        2drop 0 exit
-    then
-
-    map-offset c@ TILE_BLOCKED and 0=
+    0 map-width within 0= if
+        false exit
+    else true then
 ;
 
-: render-map ( -- )
-    map-tiles 0 do
-        i map-width /mod    ( x y )
-        game-map i + c@     ( x y tile )
-        TILE_BLOCKED and if
-            dark-wall
-        else
-            dark-ground
-        then
-        plot-attr
-    loop
+: map-passable ( x y -- flag )
+    2dup map-contains if
+        map-offset c@ TILE_BLOCKED and 0=
+    else 2drop false then
 ;
 
 : carve-rect { x1 y1 x2 y2 -- }

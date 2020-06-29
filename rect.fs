@@ -1,11 +1,3 @@
-struct
-    char% field rect-x1
-    char% field rect-y1
-    char% field rect-x2
-    char% field rect-y2
-end-struct rect%
-rect% nip constant rect-size
-
 : rect, ( y2 x2 y1 x1 -- )
     c, c, c, c,
 ;
