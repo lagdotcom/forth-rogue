@@ -11,8 +11,14 @@ include vid.fs
     over over                   ( mx my mx my )
     player entity-y @ +         ( mx my mx y )
     player entity-x @ under+    ( mx my x y )
-    map-passable
-    if
+
+    2dup get-blocker dup if
+        nip nip
+        \ TODO: attack thing
+        nip nip exit
+    else drop then
+
+    map-passable if
         player clear-entity
         player move-entity
         fov-recompute on
@@ -34,29 +40,43 @@ include vid.fs
     endcase
 ;
 
+: render-all ( -- )
+    fov-recompute if recompute-fov then
+    render-map
+    fov-recompute off
+    draw-all-entities
+    present
+;
+
+: handle-player-turn ( -- )
+    player entity-x @
+    player entity-y @
+    at-xy process-input
+;
+
+: handle-enemy-turn ( -- )
+    \ TODO
+;
+
 : mainloop ( -- )
     haltgame off
     begin
-        fov-recompute if recompute-fov then
-        render-map
-        fov-recompute off
-        draw-all-entities
-        present
-
-        player entity-x @
-        player entity-y @
-        at-xy process-input
+        render-all
+        handle-player-turn
+        handle-enemy-turn
     haltgame @ until
 ;
 
 player
     '@' 0 0
     <A White >FG A>
+    s" you"
+    ENTITY_BLOCKS
 entity!
 
 vid-clear
 fov-recompute on
-player 6 10 30 generate-map
+player 6 10 30 2 generate-map
 player add-entity
 
 mainloop

@@ -67,7 +67,35 @@
 0 value gen-h
 0 value gen-cx
 0 value gen-cy
-: generate-room { rects numrects min-size max-size -- rects numrects }
+
+: add-orc ( x y -- )
+    'o' -rot
+    <A Green >FG A>
+    s" orc"
+    ENTITY_BLOCKS
+    alloc-entity add-entity
+;
+
+: add-troll ( x y -- )
+    'T' -rot
+    <A Green >FG A>
+    s" troll"
+    ENTITY_BLOCKS
+    alloc-entity add-entity
+;
+
+: place-monster-in-room ( -- )
+    gen-x1 1+ gen-x2 2 - randint
+    gen-y1 1+ gen-y2 2 - randint         ( x y )
+    2dup get-blocker if
+        2drop exit
+    then
+
+    0 99 randint 80 <
+    if add-orc else add-troll then
+;
+
+: generate-room { rects numrects min-size max-size max-monsters -- rects numrects }
     min-size max-size randint to gen-w
     min-size max-size randint to gen-h
     0 map-width gen-w - randint
@@ -93,19 +121,21 @@
     numrects dup 0> if
         2dup 1- rect-size * + rect@ rect-centre         ( rects numrects ox oy )
         gen-cx gen-cy carve-random-tunnel
-    then
+    then 1+
 
-    1+
+    0 max-monsters randint 0 ?do
+        place-monster-in-room
+    loop
 ;
 
-: generate-map { player min-size max-size num-rooms -- }
+: generate-map { player min-size max-size num-rooms max-monsters -- }
     rect-size num-rooms *                   ( memsz )
     allocate throw 0                        ( rects numrects )
 
     1 fill-map
 
     num-rooms 0 do
-        min-size max-size generate-room
+        min-size max-size max-monsters generate-room
     loop
 
     drop

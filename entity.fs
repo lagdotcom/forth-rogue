@@ -7,11 +7,23 @@ entities max-entities entity-size * 0 fill
     tuck entity-y +! entity-x +!
 ;
 
-: entity! { entity ch x y fg -- }
+: entity! { entity ch x y fg name name-len flags -- }
     ch entity entity-ch !
     x entity entity-x !
     y entity entity-y !
     fg entity entity-fg !
+    name entity entity-name !
+    name-len entity entity-name-len !
+    flags entity entity-flags !
+;
+
+: alloc-entity { ch x y fg name name-len flags -- entity }
+    entity-size allocate throw
+    dup ch x y fg name name-len flags entity!
+;
+
+: free-entity ( entity -- )
+    free throw
 ;
 
 : find-entity-offset ( en list -- list+n|0 )
@@ -44,4 +56,19 @@ entities max-entities entity-size * 0 fill
         \ maybe an error?
     then
     drop
+;
+
+: get-blocker { x y -- en|0 }
+    entities max-entities 0 do
+        dup @ dup if
+            dup entity-flags @ ENTITY_BLOCKS and if
+                dup entity-x @
+                swap entity-y @
+                x y d= if
+                    unloop exit
+                then
+            else drop then
+        else drop then
+        cell+
+    loop drop false
 ;

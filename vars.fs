@@ -2,6 +2,8 @@
 2 constant TILE_OPAQUE
 4 constant TILE_EXPLORED
 
+1 constant ENTITY_BLOCKS
+
 27 constant k-esc
 
 <A Blue >BG A>          constant dark-wall
