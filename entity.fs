@@ -1,13 +1,22 @@
 \ TODO: linked list?
 100 constant max-entities
 create entities max-entities cells allot
-entities max-entities entity-size * 0 fill
+
+: zero-entities ( -- )
+    entities max-entities cells 0 fill
+;
+zero-entities
 
 : move-entity ( mx my en -- )
     tuck entity-y +! entity-x +!
 ;
 
+: entity-xy@ ( entity -- x y )
+    dup entity-x @ swap entity-y @
+;
+
 : entity! { entity ch x y fg name name-len flags -- }
+    entity entity-size 0 fill
     ch entity entity-ch !
     x entity entity-x !
     y entity entity-y !
@@ -23,6 +32,9 @@ entities max-entities entity-size * 0 fill
 ;
 
 : free-entity ( entity -- )
+    dup entity-fighter maybe-free
+    dup entity-ai maybe-free
+
     free throw
 ;
 
@@ -62,9 +74,7 @@ entities max-entities entity-size * 0 fill
     entities max-entities 0 do
         dup @ dup if
             dup entity-flags @ ENTITY_BLOCKS and if
-                dup entity-x @
-                swap entity-y @
-                x y d= if
+                entity-xy@ x y d= if
                     unloop exit
                 then
             else drop then
@@ -84,4 +94,16 @@ entities max-entities entity-size * 0 fill
         cell+
     loop
     drop
+;
+
+: free-all-entities ( -- )
+    ['] free-entity for-each-entity
+    zero-entities
+;
+
+: add-component { entity 'offset size -- component }
+    entity 'offset execute @ dup 0= if
+        drop size allocate throw dup
+        entity 'offset execute !
+    else @ then
 ;

@@ -81,19 +81,16 @@
 ;
 
 : draw-entity { en -- }
-    en entity-x @
-    en entity-y @
+    en entity-xy@
     is-in-fov if
-        en entity-x @
-        en entity-y @ 2dup
+        en entity-xy@ 2dup
         en entity-ch @ plot-ch
         en entity-fg @ plot-fg
     then
 ;
 
 : clear-entity { en -- }
-    en entity-x @
-    en entity-y @ 2dup
+    en entity-xy@ 2dup
     bl plot-ch
     en entity-fg @ plot-fg
 ;
