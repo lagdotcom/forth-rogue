@@ -14,7 +14,7 @@ include vid.fs
 
     2dup get-blocker dup if
         nip nip
-        \ TODO: attack thing
+        drop \ TODO: attack thing
         nip nip exit
     else drop then
 
@@ -41,6 +41,7 @@ include vid.fs
 ;
 
 : render-all ( -- )
+    clear-all-entities
     fov-recompute if recompute-fov then
     render-map
     fov-recompute off

@@ -6,7 +6,7 @@
     map-width * fov-map + +
 ;
 
-: is-in-fov ( x y )
+: is-in-fov ( x y -- flag )
     fov-offset c@
 ;
 

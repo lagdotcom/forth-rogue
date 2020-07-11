@@ -99,26 +99,9 @@
 ;
 
 : draw-all-entities ( -- )
-    entities max-entities 0 do
-        dup @
-        dup if
-            draw-entity
-        else
-            drop
-        then
-        cell+
-    loop
-    drop
+    ['] draw-entity for-each-entity
 ;
 
 : clear-all-entities ( -- )
-    entities max-entities 0 do
-        dup @
-        dup if
-            clear-entity
-        else
-            drop
-        then
-        cell+
-    loop
+    ['] clear-entity for-each-entity
 ;

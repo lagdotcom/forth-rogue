@@ -72,3 +72,16 @@ entities max-entities entity-size * 0 fill
         cell+
     loop drop false
 ;
+
+: for-each-entity { xt -- }
+    entities max-entities 0 do
+        dup @
+        dup if
+            xt execute
+        else
+            drop
+        then
+        cell+
+    loop
+    drop
+;
