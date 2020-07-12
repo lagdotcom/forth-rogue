@@ -29,3 +29,5 @@ end-struct fighter%
 struct
     cell% field ai-fn           ( entity -- )
 end-struct ai%
+
+defer clear-entity

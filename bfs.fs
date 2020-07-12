@@ -169,10 +169,7 @@ nodemap% %size constant nodemap-size
     r>
 ;
 
-1000 cells constant bfs-queue-size
-queue% %alloc constant bfs-queue
-bfs-queue-size allocate throw bfs-queue queue-start !
-
+2000 queue: bfs-queue
 0 value root-node
 0 value goal-node
 0 value v-node

@@ -4,6 +4,8 @@ include utils.fs
 include rect.fs
 include queue.fs
 include entity.fs
+include message.fs
+include actions.fs
 include map.fs
 include fov.fs
 include vid.fs
@@ -84,14 +86,18 @@ include mapgen.fs
     begin
         render-all
         handle-player-turn      ( used )
-        if handle-enemy-turn then
+        run-actions
+        if
+            handle-enemy-turn
+            run-actions
+        then
     haltgame @ until
 ;
 
 player
     '@' 0 0
     <A White >FG A>
-    s" you"
+    s" player"
     ENTITY_BLOCKS
 entity!
 player 30 2 5 add-fighter

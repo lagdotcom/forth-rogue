@@ -66,8 +66,8 @@ zero-entities
         false swap !
     else
         \ maybe an error?
+        drop
     then
-    drop
 ;
 
 : first-entity-that { xt -- en|0 }

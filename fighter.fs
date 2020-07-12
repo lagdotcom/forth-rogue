@@ -12,20 +12,35 @@
 
 : damage { entity amount -- }
     amount negate entity entity-fighter @ fighter-hp +!
+
+    entity entity-fighter @ fighter-hp @ 1 < if
+        'entity-died entity add-action
+    then
 ;
 
 : attack { attacker victim -- }
     attacker entity-fighter @ fighter-power @       ( power )
     victim entity-fighter @ fighter-defense @ -     ( damage )
-    
+
     dup 0> if
-        dup victim swap damage                      ( damage )
-        attacker entity.name ." attacks "
-        victim entity.name ." for "
-        . ." damage." cr
+        >r
+        <message
+            attacker        m|name
+            m"  attacks "
+            victim          m|name
+            m"  for "
+            r@              m|num
+            m"  damage."
+        message>
+
+        victim r> damage
     else
         drop
-        attacker entity.name ." attacks "
-        victim entity.name ." but does no damage." cr
+        <message
+            attacker                    m|name
+            m"  attacks "
+            victim                      m|name
+            m"  but does no damage."
+        message>
     then
 ;

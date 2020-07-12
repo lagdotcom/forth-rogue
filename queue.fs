@@ -15,12 +15,18 @@ end-struct queue%
     =
 ;
 
-: enqueue { node q -- }
-    node q queue-enq @ !
+: enqueue { item q -- }
+    item q queue-enq @ !
     cell q queue-enq +!
 ;
 
-: dequeue { q -- node }
+: dequeue { q -- item }
     q queue-deq @ @
     cell q queue-deq +!
+;
+
+: queue: ( size "name" -- )
+    cells allocate throw            ( buffer )
+    queue% %alloc dup constant      ( buffer queue )
+    queue-start !
 ;

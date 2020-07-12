@@ -89,11 +89,11 @@
     then
 ;
 
-: clear-entity { en -- }
+:noname { en -- }
     en entity-xy@ 2dup
     bl plot-ch
     en entity-fg @ plot-fg
-;
+; is clear-entity
 
 : draw-all-entities ( -- )
     ['] draw-entity for-each-entity
