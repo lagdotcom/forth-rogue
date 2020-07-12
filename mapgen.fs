@@ -40,6 +40,8 @@
     then
 ;
 
+0 value gen-rects
+0 value gen-numrects
 0 value gen-x1
 0 value gen-y1
 0 value gen-x2
@@ -80,7 +82,7 @@
     if add-orc else add-troll then
 ;
 
-: generate-room { rects numrects min-size max-size max-monsters -- rects numrects }
+: generate-room { min-size max-size max-monsters -- }
     min-size max-size randint to gen-w
     min-size max-size randint to gen-h
     0 map-width gen-w - randint
@@ -88,25 +90,27 @@
     gen-w gen-h rect-convert
     to gen-y2 to gen-x2 to gen-y1 to gen-x1
 
-    rects dup numrects 0 ?do            ( orects rects )
-        dup rect@ gen-x1 gen-y1 gen-x2 gen-y2           ( orects rects r1 r2 )
-        rect-intersects if              ( orects rects )
-            drop numrects
-            unloop exit
+    gen-rects gen-numrects 0 ?do                        ( rect )
+        dup rect@ gen-x1 gen-y1 gen-x2 gen-y2           ( rect xyxy xyxy )
+        rect-intersects if                              ( rect )
+            drop unloop exit
         then
 
         rect-size +
-    loop                                ( orects rects )
+    loop                                                ( rect )
 
     gen-x1 gen-y1 gen-x2 gen-y2 rect-centre
     to gen-cy to gen-cx
     gen-x1 gen-y1 gen-x2 gen-y2 rect!
     gen-x1 gen-y1 gen-x2 gen-y2 carve-rect
 
-    numrects dup 0> if
-        2dup 1- rect-size * + rect@ rect-centre         ( rects numrects ox oy )
+    gen-numrects dup 0> if                              ( numrects )
+        1- rect-size *                                  ( offset )
+        gen-rects + rect@ rect-centre                   ( x y )
         gen-cx gen-cy carve-random-tunnel
-    then 1+
+    else drop then
+
+    gen-numrects 1+ to gen-numrects
 
     0 max-monsters randint 0 ?do
         place-monster-in-room
@@ -114,8 +118,8 @@
 ;
 
 : generate-map { player min-size max-size num-rooms max-monsters -- }
-    rect% num-rooms *           ( align size )
-    %alloc 0                    ( rects numrects )
+    rect% num-rooms * %alloc to gen-rects
+    0 to gen-numrects
 
     1 fill-map
 
@@ -123,10 +127,9 @@
         min-size max-size max-monsters generate-room
     loop
 
-    drop
-    dup rect@ rect-centre
+    gen-rects rect@ rect-centre
     player entity-y !
     player entity-x !
 
-    free throw
+    gen-rects free throw
 ;
