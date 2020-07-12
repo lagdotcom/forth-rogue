@@ -27,7 +27,7 @@ zero-entities
 ;
 
 : alloc-entity { ch x y fg name name-len flags -- entity }
-    entity-size allocate throw
+    entity% %alloc
     dup ch x y fg name name-len flags entity!
 ;
 
@@ -101,9 +101,9 @@ zero-entities
     zero-entities
 ;
 
-: add-component { entity 'offset size -- component }
+: add-component { entity 'offset align size -- component }
     entity 'offset execute @ dup 0= if
-        drop size allocate throw dup
+        drop align size %alloc dup
         entity 'offset execute !
     else @ then
 ;

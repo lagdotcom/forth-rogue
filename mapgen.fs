@@ -114,8 +114,8 @@
 ;
 
 : generate-map { player min-size max-size num-rooms max-monsters -- }
-    rect-size num-rooms *                   ( memsz )
-    allocate throw 0                        ( rects numrects )
+    rect% num-rooms *           ( align size )
+    %alloc 0                    ( rects numrects )
 
     1 fill-map
 

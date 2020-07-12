@@ -6,6 +6,6 @@
 ;
 
 : add-fighter { entity hp defense power -- }
-    entity ['] entity-fighter fighter-size add-component
+    entity ['] entity-fighter fighter% add-component
     hp hp defense power fighter!
 ;

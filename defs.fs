@@ -9,7 +9,7 @@ struct
     cell% field entity-fighter
     cell% field entity-ai
 end-struct entity%
-entity% nip constant entity-size
+entity% %size constant entity-size
 
 struct
     char% field rect-x1
@@ -17,7 +17,7 @@ struct
     char% field rect-x2
     char% field rect-y2
 end-struct rect%
-rect% nip constant rect-size
+rect% %size constant rect-size
 
 struct
     cell% field fighter-max-hp
@@ -25,9 +25,7 @@ struct
     cell% field fighter-defense
     cell% field fighter-power
 end-struct fighter%
-fighter% nip constant fighter-size
 
 struct
     cell% field ai-fn           ( entity -- )
 end-struct ai%
-ai% nip constant ai-size

@@ -6,6 +6,7 @@ include entity.fs
 include map.fs
 include fov.fs
 include vid.fs
+include bfs.fs
 include ai.fs
 include fighter.fs
 include mapgen.fs
