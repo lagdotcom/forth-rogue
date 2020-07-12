@@ -9,10 +9,6 @@
     y h +
 ;
 
-: rect-xywh, ( x y w h -- )
-    rect-convert rect,
-;
-
 : rect@ { rect -- x1 y1 x2 y2 }
     rect rect-x1 c@
     rect rect-y1 c@

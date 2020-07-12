@@ -15,12 +15,6 @@
 \                 Q.enqueue(w)
 
 struct
-    cell% field queue-start
-    cell% field queue-deq
-    cell% field queue-enq
-end-struct queue%
-
-struct
     cell% field node-x
     cell% field node-y
     cell% field node-blocked
@@ -34,17 +28,6 @@ struct
     cell% field nodemap-h
 end-struct nodemap%
 nodemap% %size constant nodemap-size
-
-: clear-queue { q -- }
-    q queue-start @ q queue-deq !
-    q queue-start @ q queue-enq !
-;
-
-: queue-is-empty { q -- flag }
-    q queue-deq @
-    q queue-enq @
-    =
-;
 
 : set-blocked ( node -- )
     node-blocked on
@@ -62,33 +45,18 @@ nodemap% %size constant nodemap-size
     node-parent !
 ;
 
-: enqueue { node q -- }
-    node q queue-enq @ !
-    cell q queue-enq +!
-;
-
-: dequeue { q -- node }
-    q queue-deq @ @
-    cell q queue-deq +!
-;
-
 : nodes-equal { n1 n2 -- flag }
     n1 node-x @ n1 node-y @
     n2 node-x @ n2 node-y @
     d=
 ;
 
-: setup-node { node x y -- node }
+: setup-node { node x y -- }
     x node node-x !
     y node node-y !
     0 node node-parent !
     0 node node-blocked !
     0 node node-discovered !
-;
-
-: make-node { x y -- node }
-    node% %alloc
-    x y setup-node
 ;
 
 : nodemap-cells-size ( w h -- size )

@@ -5,7 +5,7 @@ map-width map-height make-nodemap constant ai-nodemap
     map-height 0 ?do
         map-width 0 ?do
             i j get-blocker dup if              ( blocker )
-                entity = 0= if
+                entity <> if
                     i j ai-nodemap at-nodemap   ( node )
                     node-blocked on
                 then
@@ -61,13 +61,12 @@ map-width map-height make-nodemap constant ai-nodemap
 ;
 
 : basic-ai { entity -- }
-    entity entity-xy@
-    is-in-fov if
+    entity entity-xy@ is-in-fov if
         entity entity-xy@
         player entity-xy@
 
         fdistance 2e f< if
-            \ TODO: attack!
+            entity player attack
         else
             entity
             player entity-xy@

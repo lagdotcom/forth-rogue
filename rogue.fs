@@ -2,13 +2,14 @@ include defs.fs
 include vars.fs
 include utils.fs
 include rect.fs
+include queue.fs
 include entity.fs
 include map.fs
 include fov.fs
 include vid.fs
 include bfs.fs
-include ai.fs
 include fighter.fs
+include ai.fs
 include mapgen.fs
 
 : move-player ( mx my -- flag )
@@ -18,9 +19,8 @@ include mapgen.fs
 
     2dup get-blocker dup if
         nip nip
-        drop \ TODO: attack thing
-        nip nip
-        true exit
+        player swap attack
+        2drop true exit
     else drop then
 
     map-passable if

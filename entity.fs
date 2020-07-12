@@ -70,13 +70,11 @@ zero-entities
     drop
 ;
 
-: get-blocker { x y -- en|0 }
+: first-entity-that { xt -- en|0 }
     entities max-entities 0 do
-        dup @ dup if
-            dup entity-flags @ ENTITY_BLOCKS and if
-                entity-xy@ x y d= if
-                    unloop exit
-                then
+        dup @ dup if                    ( addr entity )
+            dup xt execute if           ( addr entity )
+                unloop nip exit         ( entity )
             else drop then
         else drop then
         cell+
@@ -85,15 +83,26 @@ zero-entities
 
 : for-each-entity { xt -- }
     entities max-entities 0 do
-        dup @
-        dup if
+        dup @ dup if
             xt execute
-        else
-            drop
-        then
+        else drop then
         cell+
-    loop
-    drop
+    loop drop
+;
+
+0 value block-check-x
+0 value block-check-y
+: is-blocker-at-xy { entity -- flag }
+    entity entity-flags @ ENTITY_BLOCKS and if
+        entity entity-xy@ block-check-x block-check-y d= if
+            true exit
+        then
+    then false
+;
+: get-blocker { x y -- en|0 }
+    x to block-check-x
+    y to block-check-y
+    ['] is-blocker-at-xy first-entity-that
 ;
 
 : free-all-entities ( -- )
@@ -106,4 +115,22 @@ zero-entities
         drop align size %alloc dup
         entity 'offset execute !
     else @ then
+;
+
+: entity.name ( entity -- )
+    dup entity-name @
+    swap entity-name-len @ type
+;
+
+: entity.debug { entity -- }
+    entity entity.name ." (" entity entity-ch @ emit ." ):" cr
+    ."   at (" entity entity-x @ . entity entity-y @ . ." )" cr
+
+    entity entity-fighter @ dup if
+        ."   fighter "
+        dup fighter-hp @ . ." /"
+        dup fighter-max-hp @ . ." hp "
+        dup fighter-defense @ . ." def "
+            fighter-power @ . ." pow" cr
+    else drop then
 ;
