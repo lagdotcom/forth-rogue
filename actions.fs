@@ -17,6 +17,9 @@ action-queue clear-queue
 ;
 
 :noname ( s-addr -- )
+    \ copy to debug log
+    dup count logwriteln
+
     \ TODO: scrolling etc.
     dup count type cr   ( s-addr )
     free throw

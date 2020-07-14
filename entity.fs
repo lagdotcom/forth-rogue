@@ -57,9 +57,18 @@ zero-entities
 : add-entity ( en -- )
     false entities find-entity-offset
     dup if                  ( en offset )
+        <log
+            s" - added entity: " logtype
+            over entity-name@ logtype
+        log>
+        
         !
     else
-        \ log error or something LOL
+        <log
+            s" ! failed to add entity: " logtype
+            over entity-name@ logtype
+        log>
+
         drop
     then
 ;
@@ -122,7 +131,7 @@ zero-entities
 ;
 
 : entity.name ( entity -- )
-    entity-name-len 2@ type
+    entity-name@ type
 ;
 
 : entity.debug { entity -- }

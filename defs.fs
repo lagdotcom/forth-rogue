@@ -11,6 +11,10 @@ struct
 end-struct entity%
 entity% %size constant entity-size
 
+: entity-name@ ( en -- str u )
+    entity-name-len 2@
+;
+
 struct
     char% field rect-x1
     char% field rect-y1

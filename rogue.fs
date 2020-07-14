@@ -1,3 +1,6 @@
+include debuglog.fs
+s" --- forth rogue v0.1 starting up" logwriteln
+
 include defs.fs
 include vars.fs
 include utils.fs
@@ -13,6 +16,7 @@ include bfs.fs
 include fighter.fs
 include ai.fs
 include mapgen.fs
+s" --- included all deps" logwriteln
 
 : move-player ( mx my -- flag )
     over over                   ( mx my mx my )
@@ -136,7 +140,10 @@ player 6 10 30 2 generate-map
 player add-entity
 
 mainloop
+s" --- shutting down" logwriteln
 
 free-all-entities
 0 attr!
+
+logclose
 bye

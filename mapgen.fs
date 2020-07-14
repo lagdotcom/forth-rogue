@@ -99,6 +99,17 @@
         rect-size +
     loop                                                ( rect )
 
+    <log
+        s" -- adding room " logtype
+        gen-x1 log.
+        ',' logemit
+        gen-y1 log.
+        '-' logemit
+        gen-x2 log.
+        ',' logemit
+        gen-y2 log.
+    log>
+
     gen-x1 gen-y1 gen-x2 gen-y2 rect-centre
     to gen-cy to gen-cx
     gen-x1 gen-y1 gen-x2 gen-y2 rect!
@@ -118,6 +129,8 @@
 ;
 
 : generate-map { player min-size max-size num-rooms max-monsters -- }
+    s" -- generating map" logwriteln
+
     rect% num-rooms * %alloc to gen-rects
     0 to gen-numrects
 
