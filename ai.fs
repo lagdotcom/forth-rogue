@@ -4,13 +4,12 @@ map-width map-height make-nodemap constant ai-nodemap
     ai-nodemap setup-nodemap-nodes
     map-height 0 ?do
         map-width 0 ?do
-            i j get-blocker dup if              ( blocker )
+            i j get-blocker ?dup-if             ( blocker )
                 entity <> if
                     i j ai-nodemap at-nodemap   ( node )
                     node-blocked on
                 then
             else
-                drop
                 i j map-passable 0= if
                     i j ai-nodemap at-nodemap
                     node-blocked on

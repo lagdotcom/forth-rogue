@@ -52,7 +52,7 @@ zero-entities
 
 : add-entity ( en -- )
     false entities find-entity-offset
-    dup if                  ( en offset )
+    ?dup-if                 ( en offset )
         <log
             s" - added entity: " logtype
             over entity-name@ logtype
@@ -62,39 +62,36 @@ zero-entities
     else
         <log
             s" ! failed to add entity: " logtype
-            over entity-name@ logtype
+            entity-name@ logtype
         log>
-
-        drop
     then
 ;
 
 : remove-entity ( en -- )
     entities find-entity-offset
-    dup if
+    ?dup-if
         false swap !
     else
         \ maybe an error?
-        drop
     then
 ;
 
 : first-entity-that { xt -- en|0 }
     entities max-entities 0 ?do
-        dup @ dup if                    ( addr entity )
+        dup @ ?dup-if                   ( addr entity )
             dup xt execute if           ( addr entity )
                 unloop nip exit         ( entity )
             else drop then
-        else drop then
+        then
         cell+
     loop drop false
 ;
 
 : for-each-entity { xt -- }
     entities max-entities 0 ?do
-        dup @ dup if
+        dup @ ?dup-if
             xt execute
-        else drop then
+        then
         cell+
     loop drop
 ;
@@ -134,13 +131,13 @@ zero-entities
     entity entity.name ." (" entity entity-ch @ emit ." ):" cr
     ."   at (" entity entity-xy@ . . ." )" cr
 
-    entity entity-fighter @ dup if
+    entity entity-fighter @ ?dup-if
         ."   fighter "
         dup fighter-hp @ . ." /"
         dup fighter-max-hp @ . ." hp "
         dup fighter-defense @ . ." def "
             fighter-power @ . ." pow" cr
-    else drop then
+    then
 ;
 
 : cleanup ( -- )

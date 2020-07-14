@@ -28,11 +28,11 @@ s" --- included all deps" logwriteln
     player entity-y @ +         ( mx my mx y )
     player entity-x @ under+    ( mx my x y )
 
-    2dup get-blocker dup if
+    2dup get-blocker ?dup-if
         nip nip
         player swap attack
         2drop true exit
-    else drop then
+    then
 
     map-passable if
         player clear-entity
@@ -116,9 +116,9 @@ s" --- included all deps" logwriteln
 ;
 
 : call-ai ( entity -- )
-    dup entity-ai @ dup if      ( entity ai )
+    dup entity-ai @ ?dup-if      ( entity ai )
         ai-fn @ execute
-    else 2drop then
+    else drop then
 ;
 
 : handle-enemy-turn ( -- )

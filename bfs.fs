@@ -86,9 +86,9 @@ nodemap% %size constant nodemap-size
 ;
 
 : nodemap-blocked { x y nodemap -- flag }
-    x y nodemap at-nodemap dup if
+    x y nodemap at-nodemap ?dup-if
         node-blocked @
-    else 0= then
+    else true then
 ;
 
 : setup-nodemap-nodes { nodemap -- }
