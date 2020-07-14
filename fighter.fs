@@ -25,11 +25,11 @@
     dup 0> if
         >r
         <message
-            attacker        m|name
+            attacker        mname
             m"  attacks "
-            victim          m|name
+            victim          mname
             m"  for "
-            r@              m|num
+            r@              m.
             m"  damage."
         message>
 
@@ -37,9 +37,9 @@
     else
         drop
         <message
-            attacker                    m|name
+            attacker        mname
             m"  attacks "
-            victim                      m|name
+            victim          mname
             m"  but does no damage."
         message>
     then

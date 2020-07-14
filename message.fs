@@ -11,21 +11,21 @@ here constant msg-buf msg-buf-size allot
     r@ char+ swap cmove r>
 ;
 
-: m|str { buf buf-count str str-count -- buf buf-count }
+: mtype { buf buf-count str str-count -- buf buf-count }
     str buf buf-count + str-count cmove
     buf buf-count str-count +
 ;
 
 : m" ( str u "message" -- str u )
-    [char] " parse postpone sliteral postpone m|str
+    [char] " parse postpone sliteral postpone mtype
 ; immediate
 
-: m|num ( str u n -- str u )
-    s>d <# #s #> m|str
+: m. ( str u n -- str u )
+    s>d <# #s #> mtype
 ;
 
-: m|name ( str u entity -- str u )
+: mname ( str u entity -- str u )
     dup entity-name @
     swap entity-name-len @
-    m|str
+    mtype
 ;

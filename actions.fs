@@ -32,7 +32,7 @@ action-queue clear-queue
 
 :noname { entity -- }
     <message
-        entity      m|name
+        entity      mname
         m"  dies!"
     message>
 
