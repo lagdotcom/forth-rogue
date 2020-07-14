@@ -36,6 +36,11 @@ include mapgen.fs
     then
 ;
 
+: player-dead? ( -- flag )
+    player entity-fighter @
+    fighter-hp @ 1 <
+;
+
 : process-input ( -- flag )
     \ TODO: numpad 5 counts as k-esc ???
 
@@ -88,6 +93,11 @@ include mapgen.fs
             handle-enemy-turn
             run-actions
         then
+
+        player-dead? if
+            \ TODO
+            haltgame on
+        then
     haltgame @ until
 ;
 
@@ -97,7 +107,7 @@ player
     s" player"
     ENTITY_BLOCKS
 entity!
-player 30 2 5 add-fighter
+player 10 2 5 add-fighter
 
 vid-clear
 fov-recompute on

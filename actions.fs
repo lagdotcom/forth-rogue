@@ -46,5 +46,8 @@ action-queue clear-queue
     ENTITY_NAME_ALLOC
     alloc-entity add-entity
 
-    entity free-entity
+    \ don't free the player, they have special considerations
+    entity player <> if
+        entity free-entity
+    then
 ; constant 'entity-died
