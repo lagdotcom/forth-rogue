@@ -136,7 +136,7 @@
 
     1 fill-map
 
-    num-rooms 0 do
+    num-rooms 0 ?do
         min-size max-size max-monsters generate-room
     loop
 

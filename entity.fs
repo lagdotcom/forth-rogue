@@ -43,8 +43,9 @@ zero-entities
 ;
 
 : find-entity-offset ( en list -- list+n|0 )
+    \ TODO: rewrite to use first-entity-that?
     swap                    ( list en )
-    max-entities 0 do
+    max-entities 0 ?do
         over @ over         ( list en en? en )
         = if                ( list en )
             drop unloop exit
@@ -84,7 +85,7 @@ zero-entities
 ;
 
 : first-entity-that { xt -- en|0 }
-    entities max-entities 0 do
+    entities max-entities 0 ?do
         dup @ dup if                    ( addr entity )
             dup xt execute if           ( addr entity )
                 unloop nip exit         ( entity )
@@ -95,7 +96,7 @@ zero-entities
 ;
 
 : for-each-entity { xt -- }
-    entities max-entities 0 do
+    entities max-entities 0 ?do
         dup @ dup if
             xt execute
         else drop then

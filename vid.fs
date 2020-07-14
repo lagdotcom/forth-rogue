@@ -91,6 +91,10 @@
 : draw-entity { en -- }
     en entity-xy@
     is-in-fov if
+    \ <log
+    \     s" drawing entity: " logtype
+    \     en entity-name@ logtype
+    \ log>
         en entity-xy@ 2dup
         en entity-ch @ plot-ch
         en entity-fg @ plot-fg
