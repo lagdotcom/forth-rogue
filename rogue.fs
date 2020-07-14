@@ -182,5 +182,6 @@ s" --- cleanup started" logwriteln
 cleanup
 logclose
 
+0 map-height at-xy
 0 attr!
 bye

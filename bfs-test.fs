@@ -1,5 +1,7 @@
 : cleanup ( -- ) ;
 
+true constant debug-bfs
+include queue.fs
 include bfs.fs
 
 10 constant width

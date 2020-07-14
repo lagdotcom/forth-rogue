@@ -184,14 +184,14 @@ nodemap% %size constant nodemap-size
     false
 ;
 
-false constant bfs-debug
+
 : bfs { sx sy dx dy nodemap -- x y true | false }
     dx dy nodemap at-nodemap to goal-node
     sx sy nodemap at-nodemap to root-node
 
     nodemap bfs-do if       ( goal )
         begin dup node-parent @ root-node nodes-equal 0= while
-            [ bfs-debug [IF] ]
+            [ [IFDEF] debug-bfs ]
                 dup node-xy@ swap . . cr
             [ [ENDIF] ]
             node-parent @
