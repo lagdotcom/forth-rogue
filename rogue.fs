@@ -9,10 +9,10 @@ s" --- forth rogue v0.1 starting up" logwriteln
 include defs.fs
 include vars.fs
 include utils.fs
+include message.fs
 include rect.fs
 include queue.fs
 include entity.fs
-include message.fs
 include actions.fs
 include map.fs
 include fov.fs
@@ -23,7 +23,14 @@ include ai.fs
 include mapgen.fs
 s" --- included all deps" logwriteln
 
+: player-dead? ( -- flag )
+    player entity-fighter @
+    fighter-hp @ 1 <
+;
+
 : move-player ( mx my -- flag )
+    player-dead? if 2drop false exit then
+
     over over                   ( mx my mx my )
     player entity-y @ +         ( mx my mx y )
     player entity-x @ under+    ( mx my x y )
@@ -43,11 +50,6 @@ s" --- included all deps" logwriteln
         2drop
         false
     then
-;
-
-: player-dead? ( -- flag )
-    player entity-fighter @
-    fighter-hp @ 1 <
 ;
 
 : process-input ( -- flag )
@@ -80,24 +82,42 @@ s" --- included all deps" logwriteln
     then then
 ;
 
-: draw-ui ( -- )
-    1
-    map-height 2 +
-    <A White >FG A>
-    <A Red >BG A>
+: draw-hp-bar ( -- )
+    1 msg-log-y
+    bar-width
     <#
         player entity-fighter @ fighter-max-hp @ s>d
-        # # # 2drop     \ no longer interested in this number
+        #s 2drop        \ no longer interested in this number
         '/' hold
 
         player entity-fighter @ fighter-hp @ s>d
-        # # #           \ still need this number for #> to 2drop
+        swap over dabs  \ magic to tuck a sign byte
+        #s              \ still need this number for #> to 2drop
+        rot sign        \ output - if negative!
         bl hold
         ':' hold
         'P' hold
         'H' hold
     #>
-    plot-str
+    player entity-fighter @ fighter-hp @
+    player entity-fighter @ fighter-max-hp @
+    bg-green bg-red
+    draw-bar
+;
+
+: show-log-line { msg y -- }
+    msg-log-x msg-log-y y + 0 msg-log-w plot-spaces
+    msg-log-x msg-log-y y + fg-white 0 msg count plot-str
+;
+
+: draw-ui ( -- )
+    draw-hp-bar
+
+    msg-log msg-log-size 0 ?do
+        dup @ ?dup-if
+            i show-log-line
+        then cell+
+    loop drop
 ;
 
 : render-all ( -- )
@@ -135,11 +155,6 @@ s" --- included all deps" logwriteln
             handle-enemy-turn
             run-actions
         then
-
-        player-dead? if
-            \ TODO
-            haltgame on
-        then
     haltgame @ until
 ;
 
@@ -149,7 +164,7 @@ s" --- included all deps" logwriteln
 
 player
     '@' 0 0
-    <A White >FG A>
+    fg-white
     get-player-name
     LAYER_PLAYER
     ENTITY_BLOCKS

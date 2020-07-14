@@ -12,10 +12,21 @@
 
 27 constant k-esc
 
-<A Blue >BG A>          constant dark-wall
-<A Blue >BG Blink A>    constant dark-ground
-<A Red >BG A>           constant light-wall
-<A Red >BG Blink A>     constant light-ground
+<A Green >BG A>         constant bg-green
+<A Green >BG Blink A>   constant bg-light-green
+<A Blue >BG A>          constant bg-blue
+<A Blue >BG Blink A>    constant bg-light-blue
+<A Red >BG A>           constant bg-red
+<A Red >BG Blink A>     constant bg-light-red
+
+<A White >FG A>         constant fg-white
+<A Green >FG A>         constant fg-green
+<A Red >FG A>           constant fg-red
+
+bg-blue constant dark-wall
+bg-light-blue constant dark-ground
+bg-red constant light-wall
+bg-light-red constant light-ground
 
 form 1- * constant vidbuf-size
 variable vidbuf-fg      vidbuf-size allot
@@ -35,3 +46,9 @@ variable fov-map map-tiles allot
 
 variable haltgame
 create player entity-size allot
+
+20 constant bar-width
+rows 1- map-height - 10 min constant msg-log-size
+bar-width 2 + constant msg-log-x
+cols 1- msg-log-x - constant msg-log-w
+map-height 2 + constant msg-log-y

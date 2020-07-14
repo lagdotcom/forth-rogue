@@ -1,5 +1,18 @@
 256 constant msg-buf-size
-here constant msg-buf msg-buf-size allot
+create msg-buf msg-buf-size allot
+
+align create msg-log msg-log-size cells allot
+
+: add-to-log ( s-addr -- )
+    msg-log @ ?dup-if free throw then
+
+    msg-log msg-log-size 1 ?do
+        cell+
+        dup dup @ swap cell- !
+    loop
+
+    !
+;
 
 : <m ( -- str u )
     msg-buf 0
@@ -22,8 +35,4 @@ here constant msg-buf msg-buf-size allot
 
 : m. ( str u n -- str u )
     s>d <# #s #> mtype
-;
-
-: mname ( str u entity -- str u )
-    entity-name@ mtype
 ;

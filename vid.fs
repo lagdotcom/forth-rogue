@@ -19,7 +19,7 @@
     vidbuf-fg plot-part
 ;
 
-: plot-bg ( x y fg -- )
+: plot-bg ( x y bg -- )
     vidbuf-bg plot-part
 ;
 
@@ -29,9 +29,17 @@
 
 : plot-str { x y fg bg str str-len -- }
     str-len 0 ?do
-        x i + y fg plot-fg
-        x i + y bg plot-bg
-        x i + y str i + c@ plot-ch
+              x i + y fg plot-fg
+        bg if x i + y bg plot-bg then
+              x i + y str i + c@ plot-ch
+    loop
+;
+
+: plot-spaces { x y bg count -- }
+    count 0 ?do
+        x i + y 2dup
+            bg plot-bg
+            bl plot-ch
     loop
 ;
 
@@ -113,4 +121,12 @@
 
 : clear-all-entities ( -- )
     ['] clear-entity for-each-entity
+;
+
+: draw-bar { x y width name name-len val vmax fill back -- }
+    x y back width              plot-spaces
+    val 0> if
+        x y fill val width * vmax / plot-spaces
+    then
+    x 1+ y 0 0 name name-len    plot-str
 ;

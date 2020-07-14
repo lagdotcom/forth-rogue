@@ -19,10 +19,7 @@ action-queue clear-queue
 :noname ( s-addr -- )
     \ copy to debug log
     dup count logwriteln
-
-    \ TODO: scrolling etc.
-    dup count type cr   ( s-addr )
-    free throw
+    add-to-log
 ; constant 'message
 
 : <message ( -- xt str u )
@@ -44,7 +41,7 @@ action-queue clear-queue
 
     \ make a corpse
     '%' entity entity-xy@
-    <A Red >FG A>
+    fg-red
     <m m" remains of " entity mname m>
     LAYER_CORPSE
     ENTITY_NAME_ALLOC
