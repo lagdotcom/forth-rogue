@@ -3,7 +3,6 @@ struct
     cell% field entity-x
     cell% field entity-y
     cell% field entity-fg
-    cell% field entity-name-len
     cell% field entity-name
     cell% field entity-flags
     cell% field entity-fighter
@@ -17,7 +16,7 @@ entity% %size constant entity-size
 ;
 
 : entity-name@ ( en -- str u )
-    entity-name-len 2@
+    entity-name @ count
 ;
 
 struct

@@ -54,7 +54,7 @@
 : add-orc ( x y -- )
     'o' -rot
     <A Green >FG A>
-    s" orc"
+    c" orc"
     ENTITY_BLOCKS
     alloc-entity dup dup add-entity
     10 0 3 add-fighter
@@ -64,7 +64,7 @@
 : add-troll ( x y -- )
     'T' -rot
     <A Green >FG A>
-    s" troll"
+    c" troll"
     ENTITY_BLOCKS
     alloc-entity dup dup add-entity
     16 1 4 add-fighter

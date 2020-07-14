@@ -131,10 +131,14 @@ s" --- included all deps" logwriteln
     haltgame @ until
 ;
 
+: get-player-name ( -- c-addr )
+    c" player"
+;
+
 player
     '@' 0 0
     <A White >FG A>
-    s" player"
+    get-player-name
     ENTITY_BLOCKS
 entity!
 player 10 2 5 add-fighter
@@ -151,4 +155,5 @@ cleanup
 logclose
 
 0 attr!
+see get-player-name
 bye
