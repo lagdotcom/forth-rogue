@@ -24,8 +24,7 @@ s" debug.log" w/o create-file throw constant log-file
 ;
 
 : log> ( -- )
-    \ TODO: this seems unsafe a bit?
-    10 logemit
+    newline logtype
 ;
 
 : logwriteln ( str u -- )
