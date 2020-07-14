@@ -37,6 +37,8 @@ include mapgen.fs
 ;
 
 : process-input ( -- flag )
+    \ TODO: numpad 5 counts as k-esc ???
+
     ekey
     case
         k-esc   of haltgame on false endof
@@ -46,11 +48,6 @@ include mapgen.fs
         k-right of  1  0 move-player endof
         k-down  of  0  1 move-player endof
         k-left  of -1  0 move-player endof
-
-        k-home  of -1 -1 move-player endof
-        k-prior of  1 -1 move-player endof
-        k-next  of  1  1 move-player endof
-        k-end   of -1  1 move-player endof
 
         \ unrecognised key; don't use up player turn
         false swap

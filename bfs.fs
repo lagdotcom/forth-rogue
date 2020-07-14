@@ -154,18 +154,6 @@ nodemap% %size constant nodemap-size
     node node-xy@ 0 -1 nodemap test-node-edge if
         r> 1+ >r
     then
-    node node-xy@ 1 1 nodemap test-node-edge if
-        r> 1+ >r
-    then
-    node node-xy@ -1 -1 nodemap test-node-edge if
-        r> 1+ >r
-    then
-    node node-xy@ -1 1 nodemap test-node-edge if
-        r> 1+ >r
-    then
-    node node-xy@ 1 -1 nodemap test-node-edge if
-        r> 1+ >r
-    then
     r>
 ;
 

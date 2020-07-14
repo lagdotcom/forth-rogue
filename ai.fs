@@ -65,7 +65,7 @@ map-width map-height make-nodemap constant ai-nodemap
         entity entity-xy@
         player entity-xy@
 
-        fdistance 2e f< if
+        fdistance 1e f= if
             entity player attack
         else
             entity
