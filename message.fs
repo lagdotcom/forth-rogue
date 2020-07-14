@@ -25,7 +25,5 @@ here constant msg-buf msg-buf-size allot
 ;
 
 : mname ( str u entity -- str u )
-    dup entity-name @
-    swap entity-name-len @
-    mtype
+    entity-name-len 2@ mtype
 ;

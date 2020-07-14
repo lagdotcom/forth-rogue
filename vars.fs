@@ -3,6 +3,7 @@
 4 constant TILE_EXPLORED
 
 1 constant ENTITY_BLOCKS
+2 constant ENTITY_NAME_ALLOC
 
 27 constant k-esc
 

@@ -38,5 +38,13 @@ action-queue clear-queue
 
     entity clear-entity
     entity remove-entity
+
+    \ make a corpse
+    '%' entity entity-x @ entity entity-y @
+    <A Red >FG A>
+    <m m" remains of " entity mname m> count
+    ENTITY_NAME_ALLOC
+    alloc-entity add-entity
+
     entity free-entity
 ; constant 'entity-died

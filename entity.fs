@@ -32,6 +32,10 @@ zero-entities
 ;
 
 : free-entity ( entity -- )
+    dup ENTITY_NAME_ALLOC and if
+        \ entity-name is alloc'd, go back one and free the whole c-addr string
+        dup entity-name @ 1- free
+    then
     dup entity-fighter maybe-free
     dup entity-ai maybe-free
 
@@ -118,8 +122,7 @@ zero-entities
 ;
 
 : entity.name ( entity -- )
-    dup entity-name @
-    swap entity-name-len @ type
+    entity-name-len 2@ type
 ;
 
 : entity.debug { entity -- }
