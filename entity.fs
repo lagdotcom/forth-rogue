@@ -11,10 +11,6 @@ zero-entities
     tuck entity-y +! entity-x +!
 ;
 
-: entity-xy@ ( entity -- x y )
-    dup entity-x @ swap entity-y @
-;
-
 : entity! { entity ch x y fg name name-len flags -- }
     entity entity-size 0 fill
     ch entity entity-ch !
@@ -137,7 +133,7 @@ zero-entities
 
 : entity.debug { entity -- }
     entity entity.name ." (" entity entity-ch @ emit ." ):" cr
-    ."   at (" entity entity-x @ . entity entity-y @ . ." )" cr
+    ."   at (" entity entity-xy@ . . ." )" cr
 
     entity entity-fighter @ dup if
         ."   fighter "

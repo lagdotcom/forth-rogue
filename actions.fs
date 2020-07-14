@@ -43,7 +43,7 @@ action-queue clear-queue
     entity remove-entity
 
     \ make a corpse
-    '%' entity entity-x @ entity entity-y @
+    '%' entity entity-xy@
     <A Red >FG A>
     <m m" remains of " entity mname m> count
     ENTITY_NAME_ALLOC

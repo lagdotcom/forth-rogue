@@ -11,6 +11,11 @@ struct
 end-struct entity%
 entity% %size constant entity-size
 
+: entity-xy@ ( en -- x y )
+     dup entity-x @
+    swap entity-y @
+;
+
 : entity-name@ ( en -- str u )
     entity-name-len 2@
 ;

@@ -78,8 +78,7 @@
 
 : recompute-fov ( -- )
     init-fov
-    player entity-x @
-    player entity-y @
+    player entity-xy@
     fov-radius              ( x y radius )
     do-raycasting-fov
 ;
