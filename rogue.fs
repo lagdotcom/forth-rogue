@@ -53,19 +53,31 @@ s" --- included all deps" logwriteln
 : process-input ( -- flag )
     \ TODO: numpad 5 counts as k-esc ???
 
-    ekey
-    case
-        k-esc   of haltgame on false endof
-        'q'     of haltgame on false endof
+    ekey ekey>char if       \ normal key
+        case
+            \ k-esc   of haltgame on false endof
+            'q'     of haltgame on false endof
+            '8'     of  0 -1 move-player endof
+            '6'     of  1  0 move-player endof
+            '2'     of  0  1 move-player endof
+            '4'     of -1  0 move-player endof
 
-        k-up    of  0 -1 move-player endof
-        k-right of  1  0 move-player endof
-        k-down  of  0  1 move-player endof
-        k-left  of -1  0 move-player endof
+            \ unrecognised key; don't use up player turn
+            false swap
+        endcase
+    else ekey>fkey if       \ meta key
+        case
+            k-up    of  0 -1 move-player endof
+            k-right of  1  0 move-player endof
+            k-down  of  0  1 move-player endof
+            k-left  of -1  0 move-player endof
 
-        \ unrecognised key; don't use up player turn
-        false swap
-    endcase
+            \ unrecognised key; don't use up player turn
+            false swap
+        endcase
+    else                    \ unknown event type
+        drop false
+    then then
 ;
 
 : draw-ui ( -- )
@@ -155,5 +167,4 @@ cleanup
 logclose
 
 0 attr!
-see get-player-name
 bye
