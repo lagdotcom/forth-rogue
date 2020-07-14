@@ -30,3 +30,8 @@ end-struct queue%
     queue% %alloc dup constant      ( buffer queue )
     queue-start !
 ;
+
+: free-queue ( q -- )
+    dup queue-start @ free throw
+    free throw
+;

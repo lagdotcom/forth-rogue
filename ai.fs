@@ -77,3 +77,7 @@ map-width map-height make-nodemap constant ai-nodemap
     then
 ;
 ' basic-ai constant 'basic-ai
+
+: cleanup ( -- )
+    ai-nodemap free-nodemap
+cleanup ;

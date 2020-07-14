@@ -1,6 +1,11 @@
 include debuglog.fs
 s" --- forth rogue v0.1 starting up" logwriteln
 
+\ this will be extended by deps
+: cleanup ( -- )
+    s" --- cleanup finished" logwriteln
+;
+
 include defs.fs
 include vars.fs
 include utils.fs
@@ -140,10 +145,10 @@ player 6 10 30 2 generate-map
 player add-entity
 
 mainloop
-s" --- shutting down" logwriteln
 
-free-all-entities
-0 attr!
-
+s" --- cleanup started" logwriteln
+cleanup
 logclose
+
+0 attr!
 bye

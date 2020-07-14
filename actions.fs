@@ -54,3 +54,7 @@ action-queue clear-queue
         entity free-entity
     then
 ; constant 'entity-died
+
+: cleanup ( -- )
+    action-queue free-queue
+cleanup ;

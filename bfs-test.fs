@@ -1,3 +1,5 @@
+: cleanup ( -- ) ;
+
 include bfs.fs
 
 10 constant width
@@ -31,4 +33,6 @@ width height map show-nodemap
 hex
 1 1 8 8 map bfs
 .s
+
+cleanup
 bye

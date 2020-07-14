@@ -143,3 +143,8 @@ zero-entities
             fighter-power @ . ." pow" cr
     else drop then
 ;
+
+: cleanup ( -- )
+    free-all-entities
+    \ entities is static allocated, can't free
+cleanup ;

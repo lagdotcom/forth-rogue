@@ -199,3 +199,7 @@ false constant bfs-debug
         node-xy@ true
     else false then
 ;
+
+: cleanup ( -- )
+    bfs-queue free-queue
+cleanup ;
