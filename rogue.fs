@@ -151,6 +151,7 @@ player
     '@' 0 0
     <A White >FG A>
     get-player-name
+    LAYER_PLAYER
     ENTITY_BLOCKS
 entity!
 player 10 2 5 add-fighter

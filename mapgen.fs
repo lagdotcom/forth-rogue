@@ -55,6 +55,7 @@
     'o' -rot
     <A Green >FG A>
     c" orc"
+    LAYER_ENEMY
     ENTITY_BLOCKS
     alloc-entity dup dup add-entity
     10 0 3 add-fighter
@@ -65,6 +66,7 @@
     'T' -rot
     <A Green >FG A>
     c" troll"
+    LAYER_ENEMY
     ENTITY_BLOCKS
     alloc-entity dup dup add-entity
     16 1 4 add-fighter

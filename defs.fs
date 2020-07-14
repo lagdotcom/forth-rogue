@@ -4,6 +4,7 @@ struct
     cell% field entity-y
     cell% field entity-fg
     cell% field entity-name
+    cell% field entity-layer            \ TODO: does nothing yet
     cell% field entity-flags
     cell% field entity-fighter
     cell% field entity-ai

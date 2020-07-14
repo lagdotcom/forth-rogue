@@ -46,6 +46,7 @@ action-queue clear-queue
     '%' entity entity-xy@
     <A Red >FG A>
     <m m" remains of " entity mname m>
+    LAYER_CORPSE
     ENTITY_NAME_ALLOC
     alloc-entity add-entity
 

@@ -11,19 +11,20 @@ zero-entities
     tuck entity-y +! entity-x +!
 ;
 
-: entity! { entity ch x y fg name flags -- }
+: entity! { entity ch x y fg name layer flags -- }
     entity entity-size 0 fill
     ch entity entity-ch !
     x entity entity-x !
     y entity entity-y !
     fg entity entity-fg !
     name entity entity-name !
+    layer entity entity-layer !
     flags entity entity-flags !
 ;
 
-: alloc-entity { ch x y fg name flags -- entity }
+: alloc-entity { ch x y fg name layer flags -- entity }
     entity% %alloc
-    dup ch x y fg name flags entity!
+    dup ch x y fg name layer flags entity!
 ;
 
 : free-entity ( entity -- )

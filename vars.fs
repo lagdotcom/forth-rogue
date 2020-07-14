@@ -5,6 +5,11 @@
 1 constant ENTITY_BLOCKS
 2 constant ENTITY_NAME_ALLOC
 
+1 constant LAYER_CORPSE
+2 constant LAYER_ITEM
+3 constant LAYER_ENEMY
+10 constant LAYER_PLAYER
+
 27 constant k-esc
 
 <A Blue >BG A>          constant dark-wall
