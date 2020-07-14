@@ -27,6 +27,14 @@
     vidbuf-ch plot-part
 ;
 
+: plot-str { x y fg bg str str-len -- }
+    str-len 0 ?do
+        x i + y fg plot-fg
+        x i + y bg plot-bg
+        x i + y str i + c@ plot-ch
+    loop
+;
+
 : present-offset ( offset -- )
      dup cols /mod at-xy            ( offset )
      dup vidbuf-fg + c@             ( offset fg )

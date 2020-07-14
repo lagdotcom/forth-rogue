@@ -59,12 +59,33 @@ include mapgen.fs
     endcase
 ;
 
+: draw-ui ( -- )
+    1
+    map-height 2 +
+    <A White >FG A>
+    <A Red >BG A>
+    <#
+        player entity-fighter @ fighter-max-hp @ s>d
+        # # # 2drop     \ no longer interested in this number
+        '/' hold
+
+        player entity-fighter @ fighter-hp @ s>d
+        # # #           \ still need this number for #> to 2drop
+        bl hold
+        ':' hold
+        'P' hold
+        'H' hold
+    #>
+    plot-str
+;
+
 : render-all ( -- )
     clear-all-entities
     fov-recompute if recompute-fov then
     render-map
     fov-recompute off
     draw-all-entities
+    draw-ui
     present
 ;
 
