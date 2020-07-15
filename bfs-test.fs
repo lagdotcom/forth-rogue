@@ -1,4 +1,5 @@
 : cleanup ( -- ) ;
+: logwriteln ( str u -- ) 2drop ;
 
 true constant debug-bfs
 include queue.fs
