@@ -4,25 +4,25 @@ struct
     cell% field queue-enq
 end-struct queue%
 
-: clear-queue { q -- }
-    q queue-start @ q queue-deq !
-    q queue-start @ q queue-enq !
+: clear-queue { _q -- }
+    _q queue-start @ _q queue-deq !
+    _q queue-start @ _q queue-enq !
 ;
 
-: queue-is-empty { q -- flag }
-    q queue-deq @
-    q queue-enq @
+: queue-is-empty { _q -- flag }
+    _q queue-deq @
+    _q queue-enq @
     =
 ;
 
-: enqueue { item q -- }
-    item q queue-enq @ !
-    cell q queue-enq +!
+: enqueue { _item _q -- }
+    _item _q queue-enq @ !
+    cell _q queue-enq +!
 ;
 
-: dequeue { q -- item }
-    q queue-deq @ @
-    cell q queue-deq +!
+: dequeue { _q -- item }
+    _q queue-deq @ @
+    cell _q queue-deq +!
 ;
 
 : queue: ( size "name" -- )

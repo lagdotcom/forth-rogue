@@ -30,26 +30,26 @@ action-queue clear-queue
     m> add-action
 ;
 
-:noname { entity -- }
+:noname { _en -- }
     <message
-        entity      mname
+        _en mname
         m"  dies!"
     message>
 
-    entity clear-entity
-    entity remove-entity
+    _en clear-entity
+    _en remove-entity
 
     \ make a corpse
-    [char] % entity entity-xy@
+    [char] % _en entity-xy@
     red
-    <m m" remains of " entity mname m>
+    <m m" remains of " _en mname m>
     LAYER_CORPSE
     ENTITY_NAME_ALLOC
     alloc-entity add-entity
 
     \ don't free the player, they have special considerations
-    entity player <> if
-        entity free-entity
+    _en player <> if
+        _en free-entity
     then
 ; constant 'entity-died
 

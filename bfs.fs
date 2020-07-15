@@ -45,18 +45,23 @@ nodemap% %size constant nodemap-size
     node-parent !
 ;
 
-: nodes-equal { n1 n2 -- flag }
-    n1 node-x @ n1 node-y @
-    n2 node-x @ n2 node-y @
+: node-xy@ ( node -- x y )
+    dup node-x @
+    swap node-y @
+;
+
+: nodes-equal { _n1 _n2 -- flag }
+    _n1 node-xy@
+    _n2 node-xy@
     d=
 ;
 
-: setup-node { node x y -- }
-    x node node-x !
-    y node node-y !
-    0 node node-parent !
-    0 node node-blocked !
-    0 node node-discovered !
+: setup-node { _n _x _y -- }
+    _x _n node-x !
+    _y _n node-y !
+    0 _n node-parent !
+    0 _n node-blocked !
+    0 _n node-discovered !
 ;
 
 : nodemap-cells-size ( w h -- size )
@@ -67,91 +72,86 @@ nodemap% %size constant nodemap-size
     nodemap-cells-size nodemap-size +
 ;
 
-: nodemap-contains { x y nodemap -- flag }
-    x 0 nodemap nodemap-w @ within 0= if
+: nodemap-contains { _x _y _nodemap -- flag }
+    _x 0 _nodemap nodemap-w @ within 0= if
         drop false exit
     then
-    y 0 nodemap nodemap-h @ within 0= if
+    _y 0 _nodemap nodemap-h @ within 0= if
         false exit
     else true then
 ;
 
-: at-nodemap { x y nodemap -- node|0 }
-    x y nodemap nodemap-contains if
-        nodemap nodemap-size +      ( nodemap-nodes )
-        y nodemap nodemap-w @ *     ( nodemap-nodes y*w )
-        x +                         ( nodemap-nodes y*w+x )
+: at-nodemap { _x _y _nodemap -- node|0 }
+    _x _y _nodemap nodemap-contains if
+        _nodemap nodemap-size +     ( nodemap-nodes )
+        _y _nodemap nodemap-w @ *   ( nodemap-nodes y*w )
+        _x +                        ( nodemap-nodes y*w+x )
         node-size * +
     else false then
 ;
 
-: nodemap-blocked { x y nodemap -- flag }
-    x y nodemap at-nodemap ?dup-if
+: nodemap-blocked ( x y nodemap -- flag )
+    at-nodemap ?dup-if
         node-blocked @
     else true then
 ;
 
-: setup-nodemap-nodes { nodemap -- }
-    nodemap nodemap-h @ 0 ?do
-        nodemap nodemap-w @ 0 ?do
-            i j nodemap at-nodemap i j setup-node
+: setup-nodemap-nodes { _nodemap -- }
+    _nodemap nodemap-h @ 0 ?do
+        _nodemap nodemap-w @ 0 ?do
+            i j _nodemap at-nodemap i j setup-node
         loop
     loop
 ;
 
-: setup-nodemap { nodemap w h -- }
-    w nodemap nodemap-w !
-    h nodemap nodemap-h !
-    nodemap setup-nodemap-nodes
+: setup-nodemap { _nodemap _w _h -- }
+    _w _nodemap nodemap-w !
+    _h _nodemap nodemap-h !
+    _nodemap setup-nodemap-nodes
 ;
 
-: make-nodemap { w h -- nodemap }
-    w h nodemap-total-size allocate throw
-    dup w h setup-nodemap
+: make-nodemap { _w _h -- nodemap }
+    _w _h nodemap-total-size allocate throw
+    dup _w _h setup-nodemap
 ;
 
 : free-nodemap ( nodemap -- )
     free throw
 ;
 
-: show-nodemap { width height nodemap -- }
-    height 0 ?do
-        width 0 ?do
-            i j nodemap at-nodemap node-blocked @
+: show-nodemap { _w _h _nodemap -- }
+    _h 0 ?do
+        _w 0 ?do
+            i j _nodemap at-nodemap node-blocked @
             if [char] # else bl then emit
         loop
         cr
     loop
 ;
 
-: test-node-edge { x y mx my nodemap -- edge 1 | 0 }
-    x mx +
-    y my +
-    2dup nodemap nodemap-blocked if
+: test-node-edge { _x _y _mx _my _nodemap -- edge 1 | 0 }
+    _x _mx +
+    _y _my +
+    2dup _nodemap nodemap-blocked if
         2drop false
     else
-        nodemap at-nodemap true
+        _nodemap at-nodemap true
     then
-;
-
-: node-xy@ ( node -- x y )
-    dup node-x @
-    swap node-y @
 ;
 
 \ TODO: refactor
-: get-node-edges { node nodemap -- edge... count }
+: get-node-edges { _n _nodemap -- edge... count }
     0 >r
-    node node-xy@ 1 0 nodemap test-node-edge if
+    _n node-xy@ 1 0 _nodemap test-node-edge if
         r> 1+ >r
     then
-    node node-xy@ -1 0 nodemap test-node-edge if
+    _n node-xy@ -1 0 _nodemap test-node-edge if
         r> 1+ >r
     then
-    node node-xy@ 0 1 nodemap test-node-edge if
+    _n node-xy@ 0 1 _nodemap test-node-edge if
         r> 1+ >r
     then
-    node node-xy@ 0 -1 nodemap test-node-edge if
+    _n node-xy@ 0 -1 _nodemap test-node-edge if
         r> 1+ >r
     then
     r>
@@ -162,7 +162,7 @@ nodemap% %size constant nodemap-size
 0 value goal-node
 0 value v-node
 0 value w-edge
-: bfs-do { nodemap -- flag }
+: bfs-do { _nodemap -- flag }
     bfs-queue clear-queue
     root-node set-discovered
     root-node bfs-queue enqueue
@@ -172,7 +172,7 @@ nodemap% %size constant nodemap-size
             v-node true exit
         then
 
-        v-node nodemap get-node-edges 0 ?do
+        v-node _nodemap get-node-edges 0 ?do
             to w-edge
             w-edge is-discovered 0= if
                 w-edge set-discovered
@@ -185,11 +185,11 @@ nodemap% %size constant nodemap-size
 ;
 
 
-: bfs { sx sy dx dy nodemap -- x y true | false }
-    dx dy nodemap at-nodemap to goal-node
-    sx sy nodemap at-nodemap to root-node
+: bfs { _sx _sy _dx _dy _nodemap -- x y true | false }
+    _dx _dy _nodemap at-nodemap to goal-node
+    _sx _sy _nodemap at-nodemap to root-node
 
-    nodemap bfs-do if       ( goal )
+    _nodemap bfs-do if       ( goal )
         begin dup node-parent @ root-node nodes-equal 0= while
             [ [IFDEF] debug-bfs ]
                 dup node-xy@ swap . . cr

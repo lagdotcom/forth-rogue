@@ -2,35 +2,35 @@
     c, c, c, c,
 ;
 
-: rect-convert { x y w h -- x1 y1 x2 y2 }
-    x
-    y
-    x w +
-    y h +
+: rect-convert { _x _y _w _h -- x1 y1 x2 y2 }
+    _x
+    _y
+    _x _w +
+    _y _h +
 ;
 
-: rect@ { rect -- x1 y1 x2 y2 }
-    rect rect-x1 c@
-    rect rect-y1 c@
-    rect rect-x2 c@
-    rect rect-y2 c@
+: rect@ { _rect -- x1 y1 x2 y2 }
+    _rect rect-x1 c@
+    _rect rect-y1 c@
+    _rect rect-x2 c@
+    _rect rect-y2 c@
 ;
 
-: rect! { rect x1 y1 x2 y2 -- }
-    x1 rect rect-x1 c!
-    y1 rect rect-y1 c!
-    x2 rect rect-x2 c!
-    y2 rect rect-y2 c!
+: rect! { _rect _x1 _y1 _x2 _y2 -- }
+    _x1 _rect rect-x1 c!
+    _y1 _rect rect-y1 c!
+    _x2 _rect rect-x2 c!
+    _y2 _rect rect-y2 c!
 ;
 
-: rect-centre { x1 y1 x2 y2 -- x y }
-    x1 x2 + 2 /
-    y1 y2 + 2 /
+: rect-centre { _x1 _y1 _x2 _y2 -- x y }
+    _x1 _x2 + 2 /
+    _y1 _y2 + 2 /
 ;
 
-: rect-intersects { ax1 ay1 ax2 ay2 bx1 by1 bx2 by2 -- flag }
-    ax1 bx2 <=
-    ax2 bx1 >= and
-    ay1 by2 <= and
-    ay2 by1 >= and
+: rect-intersects { _ax1 _ay1 _ax2 _ay2 _bx1 _by1 _bx2 _by2 -- flag }
+    _ax1 _bx2 <=
+    _ax2 _bx1 >= and
+    _ay1 _by2 <= and
+    _ay2 _by1 >= and
 ;

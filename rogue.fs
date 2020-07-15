@@ -111,9 +111,9 @@ s" --- included all deps" logwriteln
     draw-bar
 ;
 
-: show-log-line { msg y -- }
-    msg-log-x msg-log-y y + 0 msg-log-w plot-spaces
-    msg-log-x msg-log-y y + white 0 msg count plot-str
+: show-log-line { _msg _y -- }
+    msg-log-x msg-log-y _y + 0 msg-log-w plot-spaces
+    msg-log-x msg-log-y _y + white 0 _msg count plot-str
 ;
 
 : draw-ui ( -- )

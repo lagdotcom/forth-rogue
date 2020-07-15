@@ -2,41 +2,41 @@
     >r game-map map-tiles r> fill
 ;
 
-: carve-rect { x1 y1 x2 y2 -- }
-    x2 1- x1 1+ do
-        y2 1- y1 1+ do
+: carve-rect { _x1 _y1 _x2 _y2 -- }
+    _x2 1- _x1 1+ do
+        _y2 1- _y1 1+ do
             0 j i map-offset c!
         loop
     loop
 ;
 
-: carve-h-tunnel { x1 x2 y -- }
-    x1 x2 > if
-        x1 1+ x2
+: carve-h-tunnel { _x1 _x2 _y -- }
+    _x1 _x2 > if
+        _x1 1+ _x2
     else
-        x2 1+ x1
+        _x2 1+ _x1
     then ?do
-        0 i y map-offset c!
+        0 i _y map-offset c!
     loop
 ;
 
-: carve-v-tunnel { y1 y2 x -- }
-    y1 y2 > if
-        y1 1+ y2
+: carve-v-tunnel { _y1 _y2 _x -- }
+    _y1 _y2 > if
+        _y1 1+ _y2
     else
-        y2 1+ y1
+        _y2 1+ _y1
     then ?do
-        0 x i map-offset c!
+        0 _x i map-offset c!
     loop
 ;
 
-: carve-random-tunnel { prv-x prv-y new-x new-y -- }
+: carve-random-tunnel { _px _py _nx _ny -- }
     0 1 randint if
-        prv-x new-x prv-y carve-h-tunnel
-        prv-y new-y new-x carve-v-tunnel
+        _px _nx _py carve-h-tunnel
+        _py _ny _nx carve-v-tunnel
     else
-        prv-y new-y prv-x carve-v-tunnel
-        prv-x new-x new-y carve-h-tunnel
+        _py _ny _px carve-v-tunnel
+        _px _nx _ny carve-h-tunnel
     then
 ;
 
@@ -84,9 +84,9 @@
     if add-orc else add-troll then
 ;
 
-: generate-room { min-size max-size max-monsters -- }
-    min-size max-size randint to gen-w
-    min-size max-size randint to gen-h
+: generate-room { _min _max _monsters -- }
+    _min _max randint to gen-w
+    _min _max randint to gen-h
     0 map-width gen-w - randint
     0 map-height gen-h - randint
     gen-w gen-h rect-convert
@@ -125,26 +125,26 @@
 
     gen-numrects 1+ to gen-numrects
 
-    0 max-monsters randint 0 ?do
+    0 _monsters randint 0 ?do
         place-monster-in-room
     loop
 ;
 
-: generate-map { player min-size max-size num-rooms max-monsters -- }
+: generate-map { _player _min _max _rooms _monsters -- }
     s" -- generating map" logwriteln
 
-    rect% num-rooms * %alloc to gen-rects
+    rect% _rooms * %alloc to gen-rects
     0 to gen-numrects
 
     1 fill-map
 
-    num-rooms 0 ?do
-        min-size max-size max-monsters generate-room
+    _rooms 0 ?do
+        _min _max _monsters generate-room
     loop
 
     gen-rects rect@ rect-centre
-    player entity-y !
-    player entity-x !
+    _player entity-y !
+    _player entity-x !
 
     gen-rects free throw
 ;

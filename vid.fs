@@ -2,13 +2,13 @@
     cols * +
 ;
 
-: plot-part { x y val buffer -- }
-    val x y screen-offset dup   ( val offset offset )
+: plot-part { _x _y _val _buf -- }
+    _val _x _y screen-offset dup    ( val offset offset )
 
-    buffer + dup c@             ( val offset addr old-val )
-    val <> if
-        true rot                ( val addr true offset )
-        vidbuf-dirty + c!       ( val addr )
+    _buf + dup c@                   ( val offset addr old-val )
+    _val <> if
+        true rot                    ( val addr true offset )
+        vidbuf-dirty + c!           ( val addr )
         c!
     else
         2drop drop
@@ -27,18 +27,18 @@
     vidbuf-ch plot-part
 ;
 
-: plot-str { x y fg bg str str-len -- }
-    str-len 0 ?do
-              x i + y fg plot-fg
-        bg if x i + y bg plot-bg then
-              x i + y str i + c@ plot-ch
+: plot-str { _x _y _fg _bg _str _str-len -- }
+    _str-len 0 ?do
+              _x i + _y _fg plot-fg
+       _bg if _x i + _y _bg plot-bg then
+              _x i + _y _str i + c@ plot-ch
     loop
 ;
 
-: plot-spaces { x y bg count -- }
-    count 0 ?do
-        x i + y 2dup
-            bg plot-bg
+: plot-spaces { _x _y _bg _count -- }
+    _count 0 ?do
+        _x i + _y 2dup
+            _bg plot-bg
             bl plot-ch
     loop
 ;
@@ -96,23 +96,23 @@
     then
 ;
 
-: draw-entity { en -- }
-    en entity-xy@
+: draw-entity { _en -- }
+    _en entity-xy@
     is-in-fov if
     \ <log
     \     s" drawing entity: " logtype
     \     en entity-name@ logtype
     \ log>
-        en entity-xy@ 2dup
-        en entity-ch @ plot-ch
-        en entity-fg @ plot-fg
+        _en entity-xy@ 2dup
+        _en entity-ch @ plot-ch
+        _en entity-fg @ plot-fg
     then
 ;
 
-:noname { en -- }
-    en entity-xy@ 2dup
+:noname { _en -- }
+    _en entity-xy@ 2dup
     bl plot-ch
-    en entity-fg @ plot-fg
+    _en entity-fg @ plot-fg
 ; is clear-entity
 
 : draw-all-entities ( -- )
@@ -123,10 +123,10 @@
     ['] clear-entity for-each-entity
 ;
 
-: draw-bar { x y width name name-len val vmax fill back -- }
-    x y back width plot-spaces
-    val 0> if
-        x y fill val width * vmax / plot-spaces
+: draw-bar { _x _y _width _name _name-len _val _vmax _fill _back -- }
+    _x _y _back _width plot-spaces
+    _val 0> if
+        _x _y _fill _val _width * _vmax / plot-spaces
     then
-    x 1+ y white 0 name name-len plot-str
+    _x 1+ _y white 0 _name _name-len plot-str
 ;

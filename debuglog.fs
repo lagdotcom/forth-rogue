@@ -37,11 +37,11 @@ s" debug.log" w/o create-file throw constant log-file
 ;
 
 [IFDEF] debug-allocations
-: allocate { size -- mem ior }
+: allocate { _size -- mem ior }
     <log
         s" ALLOC sz=" logtype
-        size log.
-        size allocate
+        _size log.
+        _size allocate
         ?dup-if
             s"  ior=" logtype
             dup log.
@@ -53,11 +53,11 @@ s" debug.log" w/o create-file throw constant log-file
     log>
 ;
 
-: free { mem -- ior }
+: free { _mem -- ior }
     <log
         s" FREE addr=" logtype
-        mem hex log. decimal
-        mem free
+        _mem hex log. decimal
+        _mem free
         ?dup-if
             s"  ior=" logtype
             dup log.

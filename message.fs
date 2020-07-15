@@ -24,9 +24,9 @@ align create msg-log msg-log-size cells allot
     r@ char+ swap cmove r>
 ;
 
-: mtype { buf buf-count str str-count -- buf buf-count }
-    str buf buf-count + str-count cmove
-    buf buf-count str-count +
+: mtype { _buf _buf-count _str _str-count -- buf buf-count }
+    _str _buf _buf-count + _str-count cmove
+    _buf _buf-count _str-count +
 ;
 
 : m" ( str u "message" -- str u )

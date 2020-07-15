@@ -11,20 +11,20 @@ zero-entities
     tuck entity-y +! entity-x +!
 ;
 
-: entity! { entity ch x y fg name layer flags -- }
-    entity entity-size 0 fill
-    ch entity entity-ch !
-    x entity entity-x !
-    y entity entity-y !
-    fg entity entity-fg !
-    name entity entity-name !
-    layer entity entity-layer !
-    flags entity entity-flags !
+: entity! { _en _ch _x _y _fg _name _layer _flags -- }
+    _en entity-size 0 fill
+    _ch _en entity-ch !
+    _x _en entity-x !
+    _y _en entity-y !
+    _fg _en entity-fg !
+    _name _en entity-name !
+    _layer _en entity-layer !
+    _flags _en entity-flags !
 ;
 
-: alloc-entity { ch x y fg name layer flags -- entity }
+: alloc-entity { _ch _x _y _fg _name _layer _flags -- entity }
     entity% %alloc
-    dup ch x y fg name layer flags entity!
+    dup _ch _x _y _fg _name _layer _flags entity!
 ;
 
 : free-entity ( entity -- )
@@ -77,10 +77,10 @@ zero-entities
     then
 ;
 
-: first-entity-that { xt -- en|0 }
+: first-entity-that { _xt -- en|0 }
     entities max-entities 0 ?do
         dup @ ?dup-if                   ( addr entity )
-            dup xt execute if           ( addr entity )
+            dup _xt execute if           ( addr entity )
                 unloop nip exit         ( entity )
             else drop then
         then
@@ -88,10 +88,10 @@ zero-entities
     loop drop false
 ;
 
-: for-each-entity { xt -- }
+: for-each-entity { _xt -- }
     entities max-entities 0 ?do
         dup @ ?dup-if
-            xt execute
+            _xt execute
         then
         cell+
     loop drop
@@ -99,16 +99,16 @@ zero-entities
 
 0 value block-check-x
 0 value block-check-y
-: is-blocker-at-xy { entity -- flag }
-    entity entity-flags @ ENTITY_BLOCKS and if
-        entity entity-xy@ block-check-x block-check-y d= if
+: is-blocker-at-xy { _en -- flag }
+    _en entity-flags @ ENTITY_BLOCKS and if
+        _en entity-xy@ block-check-x block-check-y d= if
             true exit
         then
     then false
 ;
-: get-blocker { x y -- en|0 }
-    x to block-check-x
-    y to block-check-y
+: get-blocker { _x _y -- en|0 }
+    _x to block-check-x
+    _y to block-check-y
     ['] is-blocker-at-xy first-entity-that
 ;
 
@@ -117,10 +117,10 @@ zero-entities
     zero-entities
 ;
 
-: add-component { entity 'offset align size -- component }
-    entity 'offset execute @ dup 0= if
-        drop align size %alloc dup
-        entity 'offset execute !
+: add-component { _en _'offset _align _size -- component }
+    _en _'offset execute @ dup 0= if
+        drop _align _size %alloc dup
+        _en _'offset execute !
     else @ then
 ;
 
@@ -132,11 +132,11 @@ zero-entities
     entity-name@ mtype
 ;
 
-: entity.debug { entity -- }
-    entity entity.name ." (" entity entity-ch @ emit ." ):" cr
-    ."   at (" entity entity-xy@ . . ." )" cr
+: entity.debug { _en -- }
+    _en entity.name ." (" _en entity-ch @ emit ." ):" cr
+    ."   at (" _en entity-xy@ . . ." )" cr
 
-    entity entity-fighter @ ?dup-if
+    _en entity-fighter @ ?dup-if
         ."   fighter "
         dup fighter-hp @ . ." /"
         dup fighter-max-hp @ . ." hp "

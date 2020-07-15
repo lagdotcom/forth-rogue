@@ -22,18 +22,18 @@
 0 value ray-x
 0 value ray-y
 0 value ray-err
-: cast-ray { x0 y0 x1 y1 -- }
-    x0 to ray-x
-    y0 to ray-y
-    x1 x0 - abs to ray-dx
-    x0 x1 < if 1 else -1 then to ray-sx
-    y1 y0 - abs negate to ray-dy
-    y0 y1 < if 1 else -1 then to ray-sy
+: cast-ray { _x0 _y0 _x1 _y1 -- }
+    _x0 to ray-x
+    _y0 to ray-y
+    _x1 _x0 - abs to ray-dx
+    _x0 _x1 < if 1 else -1 then to ray-sx
+    _y1 _y0 - abs negate to ray-dy
+    _y0 _y1 < if 1 else -1 then to ray-sy
     ray-dx ray-dy + to ray-err
 
     begin
-        ray-x x0 - abs dup *
-        ray-y y0 - abs dup * +      ( dx^2+dy^2 )
+        ray-x _x0 - abs dup *
+        ray-y _y0 - abs dup * +     ( dx^2+dy^2 )
         ray-rad2 <=
         ray-x ray-y map-contains and
     while
@@ -43,7 +43,7 @@
             exit
         then
 
-        ray-x x1 = ray-y y1 = and if
+        ray-x _x1 = ray-y _y1 = and if
             exit
         then
 
@@ -59,20 +59,20 @@
     repeat
 ;
 
-: do-raycasting-fov { x y radius -- }
-    0 x radius - max to ray-minx
-    0 y radius - max to ray-miny
-    map-width 1- x radius + min to ray-maxx
-    map-height 1- y radius + min to ray-maxy
-    radius radius * to ray-rad2
+: do-raycasting-fov { _x _y _radius -- }
+    0 _x _radius - max to ray-minx
+    0 _y _radius - max to ray-miny
+    map-width 1- _x _radius + min to ray-maxx
+    map-height 1- _y _radius + min to ray-maxy
+    _radius _radius * to ray-rad2
 
     ray-maxx ray-minx ?do
-        x y i ray-miny cast-ray
-        x y i ray-maxy cast-ray
+        _x _y i ray-miny cast-ray
+        _x _y i ray-maxy cast-ray
     loop
     ray-maxy ray-miny ?do
-        x y ray-minx i cast-ray
-        x y ray-maxx i cast-ray
+        _x _y ray-minx i cast-ray
+        _x _y ray-maxx i cast-ray
     loop
 ;
 
