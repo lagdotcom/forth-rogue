@@ -118,7 +118,7 @@ nodemap% %size constant nodemap-size
     height 0 ?do
         width 0 ?do
             i j nodemap at-nodemap node-blocked @
-            if '#' else bl then emit
+            if [char] # else bl then emit
         loop
         cr
     loop

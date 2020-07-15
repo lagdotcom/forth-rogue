@@ -17,9 +17,9 @@ s" debug.log" w/o create-file throw constant log-file
 ;
 
 : <log ( -- )
-    '[' logemit
+    [char] [ logemit
     utime logd.
-    ']' logemit
+    [char] ] logemit
     bl logemit
 ;
 

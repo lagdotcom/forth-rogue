@@ -2,28 +2,28 @@ $1b constant ansi-escape
 
 : ansi-bg-256 ( colour -- )
     <#
-        'm' hold
+        [char] m hold
         s>d #s
-        ';' hold
-        '5' hold
-        ';' hold
-        '8' hold
-        '4' hold
-        '[' hold
+        [char] ; hold
+        [char] 5 hold
+        [char] ; hold
+        [char] 8 hold
+        [char] 4 hold
+        [char] [ hold
         ansi-escape hold
     #> type
 ;
 
 : ansi-fg-256 ( colour -- )
     <#
-        'm' hold
+        [char] m hold
         s>d #s
-        ';' hold
-        '5' hold
-        ';' hold
-        '8' hold
-        '3' hold
-        '[' hold
+        [char] ; hold
+        [char] 5 hold
+        [char] ; hold
+        [char] 8 hold
+        [char] 3 hold
+        [char] [ hold
         ansi-escape hold
     #> type
 ;

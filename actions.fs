@@ -40,7 +40,7 @@ action-queue clear-queue
     entity remove-entity
 
     \ make a corpse
-    '%' entity entity-xy@
+    [char] % entity entity-xy@
     red
     <m m" remains of " entity mname m>
     LAYER_CORPSE

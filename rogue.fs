@@ -63,22 +63,22 @@ s" --- included all deps" logwriteln
 
     ekey ekey>char if       \ normal key
         case
-            \ k-esc   of haltgame on false endof
-            'q'     of haltgame on false endof
-            '8'     of  0 -1 move-player endof
-            '6'     of  1  0 move-player endof
-            '2'     of  0  1 move-player endof
-            '4'     of -1  0 move-player endof
+            \ k-esc    of haltgame on false endof
+            [char] q of haltgame on false endof
+            [char] 8 of  0 -1 move-player endof
+            [char] 6 of  1  0 move-player endof
+            [char] 2 of  0  1 move-player endof
+            [char] 4 of -1  0 move-player endof
 
             \ unrecognised key; don't use up player turn
             false swap
         endcase
     else ekey>fkey if       \ meta key
         case
-            k-up    of  0 -1 move-player endof
-            k-right of  1  0 move-player endof
-            k-down  of  0  1 move-player endof
-            k-left  of -1  0 move-player endof
+            k-up     of  0 -1 move-player endof
+            k-right  of  1  0 move-player endof
+            k-down   of  0  1 move-player endof
+            k-left   of -1  0 move-player endof
 
             \ unrecognised key; don't use up player turn
             false swap
@@ -94,16 +94,16 @@ s" --- included all deps" logwriteln
     <#
         player entity-fighter @ fighter-max-hp @ s>d
         #s 2drop        \ no longer interested in this number
-        '/' hold
+        [char] / hold
 
         player entity-fighter @ fighter-hp @ s>d
         swap over dabs  \ magic to tuck a sign byte
         #s              \ still need this number for #> to 2drop
         rot sign        \ output - if negative!
         bl hold
-        ':' hold
-        'P' hold
-        'H' hold
+        [char] : hold
+        [char] P hold
+        [char] H hold
     #>
     player entity-fighter @ fighter-hp @
     player entity-fighter @ fighter-max-hp @
@@ -169,7 +169,7 @@ s" --- included all deps" logwriteln
 ;
 
 player
-    '@' 0 0
+    char @ 0 0
     white
     get-player-name
     LAYER_PLAYER

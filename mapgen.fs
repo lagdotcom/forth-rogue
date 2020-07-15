@@ -52,7 +52,7 @@
 0 value gen-cy
 
 : add-orc ( x y -- )
-    'o' -rot
+    [char] o -rot
     green
     c" orc"
     LAYER_ENEMY
@@ -63,7 +63,7 @@
 ;
 
 : add-troll ( x y -- )
-    'T' -rot
+    [char] T -rot
     light-green
     c" troll"
     LAYER_ENEMY
@@ -104,11 +104,11 @@
     <log
         s" -- adding room " logtype
         gen-x1 log.
-        ',' logemit
+        [char] , logemit
         gen-y1 log.
-        '-' logemit
+        [char] - logemit
         gen-x2 log.
-        ',' logemit
+        [char] , logemit
         gen-y2 log.
     log>
 
