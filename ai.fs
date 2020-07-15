@@ -78,5 +78,6 @@ map-width map-height make-nodemap constant ai-nodemap
 ' basic-ai constant 'basic-ai
 
 : cleanup ( -- )
+    s" - freeing AI nodemap" logwriteln
     ai-nodemap free-nodemap
 cleanup ;

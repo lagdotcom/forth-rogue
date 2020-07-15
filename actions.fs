@@ -54,5 +54,6 @@ action-queue clear-queue
 ; constant 'entity-died
 
 : cleanup ( -- )
+    s" - freeing action queue" logwriteln
     action-queue free-queue
 cleanup ;

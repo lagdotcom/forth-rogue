@@ -1,6 +1,6 @@
 \ TODO: linked list?
 100 constant max-entities
-create entities max-entities cells allot
+max-entities cells allocate throw constant entities
 
 : zero-entities ( -- )
     entities max-entities cells 0 fill
@@ -146,6 +146,9 @@ zero-entities
 ;
 
 : cleanup ( -- )
+    s" - freeing all entities" logwriteln
     free-all-entities
-    \ entities is static allocated, can't free
+
+    s" - freeing entities array" logwriteln
+    entities free throw
 cleanup ;

@@ -201,5 +201,6 @@ nodemap% %size constant nodemap-size
 ;
 
 : cleanup ( -- )
+    s" - freeing BFS queue" logwriteln
     bfs-queue free-queue
 cleanup ;

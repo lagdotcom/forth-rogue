@@ -1,3 +1,6 @@
+\ true constant debug-allocations
+\ true constant debug-bfs
+
 include debuglog.fs
 s" --- forth rogue v0.1 starting up" logwriteln
 
