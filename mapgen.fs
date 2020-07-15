@@ -53,7 +53,7 @@
 
 : add-orc ( x y -- )
     'o' -rot
-    fg-green
+    green
     c" orc"
     LAYER_ENEMY
     ENTITY_BLOCKS
@@ -64,7 +64,7 @@
 
 : add-troll ( x y -- )
     'T' -rot
-    fg-green
+    light-green
     c" troll"
     LAYER_ENEMY
     ENTITY_BLOCKS

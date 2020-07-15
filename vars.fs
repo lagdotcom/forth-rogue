@@ -12,21 +12,10 @@
 
 27 constant k-esc
 
-<A Green >BG A>         constant bg-green
-<A Green >BG Blink A>   constant bg-light-green
-<A Blue >BG A>          constant bg-blue
-<A Blue >BG Blink A>    constant bg-light-blue
-<A Red >BG A>           constant bg-red
-<A Red >BG Blink A>     constant bg-light-red
-
-<A White >FG A>         constant fg-white
-<A Green >FG A>         constant fg-green
-<A Red >FG A>           constant fg-red
-
-bg-blue constant dark-wall
-bg-light-blue constant dark-ground
-bg-red constant light-wall
-bg-light-red constant light-ground
+blue constant dark-wall
+light-blue constant dark-ground
+red constant light-wall
+light-red constant light-ground
 
 form 1- * constant vidbuf-size
 variable vidbuf-fg      vidbuf-size allot

@@ -45,8 +45,8 @@
 
 : present-offset ( offset -- )
      dup cols /mod at-xy            ( offset )
-     dup vidbuf-fg + c@             ( offset fg )
-    over vidbuf-bg + c@ or attr!    ( offset )
+     dup vidbuf-fg + c@ ansi-fg-256 ( offset )
+     dup vidbuf-bg + c@ ansi-bg-256 ( offset )
          vidbuf-ch + c@ emit
 ;
 
@@ -124,9 +124,9 @@
 ;
 
 : draw-bar { x y width name name-len val vmax fill back -- }
-    x y back width              plot-spaces
+    x y back width plot-spaces
     val 0> if
         x y fill val width * vmax / plot-spaces
     then
-    x 1+ y 0 0 name name-len    plot-str
+    x 1+ y white 0 name name-len plot-str
 ;

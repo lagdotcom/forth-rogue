@@ -6,6 +6,9 @@ s" --- forth rogue v0.1 starting up" logwriteln
     s" --- cleanup finished" logwriteln
 ;
 
+include compat.fs
+include random.fs       \ gforth library - simple RNG
+include ansi.fs
 include defs.fs
 include vars.fs
 include utils.fs
@@ -101,13 +104,13 @@ s" --- included all deps" logwriteln
     #>
     player entity-fighter @ fighter-hp @
     player entity-fighter @ fighter-max-hp @
-    bg-green bg-red
+    green red
     draw-bar
 ;
 
 : show-log-line { msg y -- }
     msg-log-x msg-log-y y + 0 msg-log-w plot-spaces
-    msg-log-x msg-log-y y + fg-white 0 msg count plot-str
+    msg-log-x msg-log-y y + white 0 msg count plot-str
 ;
 
 : draw-ui ( -- )
@@ -164,7 +167,7 @@ s" --- included all deps" logwriteln
 
 player
     '@' 0 0
-    fg-white
+    white
     get-player-name
     LAYER_PLAYER
     ENTITY_BLOCKS
@@ -183,5 +186,5 @@ cleanup
 logclose
 
 0 map-height at-xy
-0 attr!
+ansi-reset
 bye

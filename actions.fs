@@ -41,7 +41,7 @@ action-queue clear-queue
 
     \ make a corpse
     '%' entity entity-xy@
-    fg-red
+    red
     <m m" remains of " entity mname m>
     LAYER_CORPSE
     ENTITY_NAME_ALLOC
