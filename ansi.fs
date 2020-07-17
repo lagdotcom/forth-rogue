@@ -65,3 +65,4 @@ $1b constant ansi-escape
 13 constant light-magenta
 14 constant light-cyan
 15 constant white
+92 constant violet

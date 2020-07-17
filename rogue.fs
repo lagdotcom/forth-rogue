@@ -160,11 +160,15 @@ variable cursor-y
 : draw-ui ( -- )
     draw-hp-bar
 
-    msg-log msg-log-size 0 ?do
-        dup @ ?dup-if
-            i show-log-line
-        then cell+
-    loop drop
+    ui-update-log if
+        msg-log msg-log-size 0 ?do
+            dup @ ?dup-if
+                i show-log-line
+            then cell+
+        loop drop
+
+        false to ui-update-log
+    then
 ;
 
 : render-all ( -- )
@@ -221,11 +225,11 @@ player
     LAYER_PLAYER
     ENTITY_BLOCKS
 entity!
-player 10 2 5 add-fighter
+player 100 2 5 add-fighter
 
 vid-clear
 fov-recompute on
-player 6 10 30 2 generate-map
+player 6 10 30 3 2 generate-map
 player add-entity
 
 mainloop

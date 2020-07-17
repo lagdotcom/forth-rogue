@@ -73,6 +73,16 @@
     'basic-ai add-ai
 ;
 
+: add-healing-potion ( x y -- )
+    [char] ! -rot
+    violet
+    c" healing potion"
+    LAYER_ITEM
+    0
+    alloc-entity dup dup add-entity
+    \ TODO: heal
+;
+
 : place-monster-in-room ( -- )
     gen-x1 1+ gen-x2 2 - randint
     gen-y1 1+ gen-y2 2 - randint         ( x y )
@@ -84,7 +94,17 @@
     if add-orc else add-troll then
 ;
 
-: generate-room { _min _max _monsters -- }
+: place-item-in-room ( -- )
+    gen-x1 1+ gen-x2 2 - randint
+    gen-y1 1+ gen-y2 2 - randint         ( x y )
+    2dup get-entity-at if
+        2drop exit
+    then
+
+    add-healing-potion
+;
+
+: generate-room { _min _max _monsters _items -- }
     _min _max randint to gen-w
     _min _max randint to gen-h
     0 map-width gen-w - randint
@@ -128,9 +148,13 @@
     0 _monsters randint 0 ?do
         place-monster-in-room
     loop
+
+    0 _items randint 0 ?do
+        place-item-in-room
+    loop
 ;
 
-: generate-map { _player _min _max _rooms _monsters -- }
+: generate-map { _player _min _max _rooms _monsters _items -- }
     s" -- generating map" logwriteln
 
     rect% _rooms * %alloc to gen-rects
@@ -139,7 +163,7 @@
     1 fill-map
 
     _rooms 0 ?do
-        _min _max _monsters generate-room
+        _min _max _monsters _items generate-room
     loop
 
     gen-rects rect@ rect-centre

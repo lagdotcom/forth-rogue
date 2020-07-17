@@ -58,7 +58,7 @@ zero-entities
             s" - added entity: " logtype
             over entity-name@ logtype
         log>
-        
+
         !
     else
         <log
@@ -110,6 +110,16 @@ zero-entities
     _x to block-check-x
     _y to block-check-y
     ['] is-blocker-at-xy first-entity-that
+;
+
+: is-entity-at-xy { _en -- flag }
+    _en entity-xy@ block-check-x block-check-y d= if true
+    else false then
+;
+: get-entity-at { _x _y -- en|0 }
+    _x to block-check-x
+    _y to block-check-y
+    ['] is-entity-at-xy first-entity-that
 ;
 
 : free-all-entities ( -- )

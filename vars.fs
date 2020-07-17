@@ -34,10 +34,12 @@ variable fov-recompute
 variable fov-map map-tiles allot
 
 variable haltgame
-entity-size allocate throw constant player 
+entity-size allocate throw constant player
 
 20 constant bar-width
 rows 1- map-height - 10 min constant msg-log-size
 bar-width 2 + constant msg-log-x
 cols 1- msg-log-x - constant msg-log-w
 map-height 2 + constant msg-log-y
+
+false value ui-update-log

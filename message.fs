@@ -12,6 +12,7 @@ align create msg-log msg-log-size cells allot
     loop
 
     !
+    true to ui-update-log
 ;
 
 : <m ( -- str u )
