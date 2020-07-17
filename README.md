@@ -8,4 +8,4 @@ Given that this is a Forth program, it should be portable. However, currently it
 
 ## Getting started
 
-You'll need [gforth](https://www.gnu.org/software/gforth/). I have no idea what version, will look that up later, but I'm running 0.7.9_20171101. Then, just run it with `gforth-fast rogue.fs`.
+You'll need [gforth](https://www.gnu.org/software/gforth/). I have no idea what version is required, but I'm running 0.7.3. Then, just run it with `./rogue`.

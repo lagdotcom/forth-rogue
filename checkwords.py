@@ -51,7 +51,7 @@ wordlists = {
     'file': set(['close-file', 'create-file', 'w/o', 'write-file', 'write-line']),
     'facility': set(['at-xy']),
     'facility-ext': set(['ekey', 'ekey>char']),
-    'ekeys': set(['ekey>fkey', 'k-down', 'k-left', 'k-right', 'k-up']),
+    'ekeys': set(['ekey>fkey', 'k-down', 'k-left', 'k-right', 'k-up', 'k-shift-mask']),
     'gforth': set(['%alloc', '%size', '-rot', '<=', '>=', '?dup-if', '[endif]', '[ifdef]', '[ifundef]', 'cell', 'cell%', 'char%', 'defer', 'emit-file', 'end-struct', 'f=', 'field', 'form', 'include', 'is', 'off', 'on', 'struct', 'under+', 'utime', '{'])
 }
 
@@ -74,7 +74,7 @@ def scanwords(fn):
             if cw:
                 if cw == 'include':
                     readtonl(f)
-                elif cw == '[char]':
+                elif cw == '[char]' or cw == 'char':
                     readtosp(f)
 
                 maybeaddw(w, cw)

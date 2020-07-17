@@ -1,0 +1,2 @@
+#!/bin/sh
+gforth-itc rogue.fs

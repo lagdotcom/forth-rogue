@@ -27,14 +27,45 @@ include bfs.fs
 include fighter.fs
 include ai.fs
 include mapgen.fs
+include keys.fs
 s" --- included all deps" logwriteln
+
+variable cursor-active  false cursor-active !
+variable cursor-x
+variable cursor-y
+: cursor-bounds-check ( -- )
+    cursor-x @ 0 max map-width  min cursor-x !
+    cursor-y @ 0 max map-height min cursor-y !
+;
+: cursor-xy+! ( x y -- )
+    cursor-y +!
+    cursor-x +!
+    cursor-bounds-check
+;
+: cursor-xy! ( x y -- )
+    cursor-y !
+    cursor-x !
+    cursor-bounds-check
+;
+: cursor-xy@ ( -- x y )
+    cursor-x @ cursor-y @
+;
 
 : player-dead? ( -- flag )
     player entity-fighter @
     fighter-hp @ 1 <
 ;
 
+: move-cursor ( mx my -- 0 )
+    cursor-active @ if cursor-xy+! else
+        cursor-active on
+        player entity-xy@ cursor-xy!
+        cursor-xy+!
+    then false
+;
+
 : move-player ( mx my -- flag )
+    cursor-active off
     player-dead? if 2drop false exit then
 
     over over                   ( mx my mx my )
@@ -60,25 +91,35 @@ s" --- included all deps" logwriteln
 
 : process-input ( -- flag )
     \ TODO: numpad 5 counts as k-esc ???
-
     ekey ekey>char if       \ normal key
         case
-            \ k-esc    of haltgame on false endof
-            [char] q of haltgame on false endof
-            [char] 8 of  0 -1 move-player endof
-            [char] 6 of  1  0 move-player endof
-            [char] 2 of  0  1 move-player endof
-            [char] 4 of -1  0 move-player endof
+            \ k-esc         of haltgame on false endof
+            k-q           of haltgame on false endof
+
+            k-shift-8     of  0 -1 move-cursor endof
+            k-shift-6     of  1  0 move-cursor endof
+            k-shift-2     of  0  1 move-cursor endof
+            k-shift-4     of -1  0 move-cursor endof
+
+            k-8           of  0 -1 move-player endof
+            k-6           of  1  0 move-player endof
+            k-2           of  0  1 move-player endof
+            k-4           of -1  0 move-player endof
 
             \ unrecognised key; don't use up player turn
             false swap
         endcase
     else ekey>fkey if       \ meta key
         case
-            k-up     of  0 -1 move-player endof
-            k-right  of  1  0 move-player endof
-            k-down   of  0  1 move-player endof
-            k-left   of -1  0 move-player endof
+            k-shift-up    of  0 -1 move-cursor endof
+            k-shift-right of  1  0 move-cursor endof
+            k-shift-down  of  0  1 move-cursor endof
+            k-shift-left  of -1  0 move-cursor endof
+
+            k-up          of  0 -1 move-player endof
+            k-right       of  1  0 move-player endof
+            k-down        of  0  1 move-player endof
+            k-left        of -1  0 move-player endof
 
             \ unrecognised key; don't use up player turn
             false swap
@@ -137,7 +178,12 @@ s" --- included all deps" logwriteln
 ;
 
 : handle-player-turn ( -- flag )
-    player entity-xy@
+    cursor-active @ if
+        cursor-xy@
+    else
+        player entity-xy@
+    then
+
     at-xy process-input
 ;
 
