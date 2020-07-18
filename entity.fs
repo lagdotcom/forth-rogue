@@ -28,12 +28,23 @@ zero-entities
 ;
 
 : free-entity ( entity -- )
+[IFDEF] debug-entity
+    <log
+        s" free-entity: " logtype
+        dup entity-name@ logtype
+        [char] @ logemit
+        dup hex log. decimal
+    log>
+[ENDIF]
+
     dup ENTITY_NAME_ALLOC and if
         \ entity-name is alloc'd, go back one and free the whole c-addr string
         dup entity-name @ 1- free
     then
     dup entity-fighter maybe-free
     dup entity-ai maybe-free
+    dup entity-inventory maybe-free-inventory
+    dup entity-item maybe-free
 
     free throw
 ;
@@ -128,6 +139,16 @@ zero-entities
 ;
 
 : add-component { _en _'offset _align _size -- component }
+[IFDEF] debug-entity
+    <log
+        s" add-component " logtype
+        hex _en log. decimal bl logemit
+        hex _'offset log. decimal bl logemit
+        _align log. bl logemit
+        _size log.
+    log>
+[ENDIF]
+
     _en _'offset execute @ dup 0= if
         drop _align _size %alloc dup
         _en _'offset execute !

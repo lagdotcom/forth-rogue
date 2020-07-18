@@ -8,6 +8,8 @@ struct
     cell% field entity-flags
     cell% field entity-fighter
     cell% field entity-ai
+    cell% field entity-inventory
+    cell% field entity-item
 end-struct entity%
 entity% %size constant entity-size
 
@@ -39,4 +41,15 @@ struct
     cell% field ai-fn           ( entity -- )
 end-struct ai%
 
+struct
+    cell% field inventory-capacity
+    cell% field inventory-items
+end-struct inventory%
+
+struct
+    cell% field item-flags
+    cell% field item-use-fn
+end-struct item%
+
 defer clear-entity
+defer maybe-free-inventory

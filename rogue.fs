@@ -1,5 +1,6 @@
 \ true constant debug-allocations
 \ true constant debug-bfs
+\ true constant debug-entity
 
 include debuglog.fs
 s" --- forth rogue v0.1 starting up" logwriteln
@@ -26,9 +27,16 @@ include vid.fs
 include bfs.fs
 include fighter.fs
 include ai.fs
+include inventory.fs
+include item.fs
 include mapgen.fs
 include keys.fs
 s" --- included all deps" logwriteln
+
+\ in some versions of gforth, the seed isn't initialised
+[IFUNDEF] seed-init
+    utime drop seed +! rnd drop
+[ENDIF]
 
 variable cursor-active  false cursor-active !
 variable cursor-x
@@ -226,6 +234,7 @@ player
     ENTITY_BLOCKS
 entity!
 player 100 2 5 add-fighter
+player 26 add-inventory
 
 vid-clear
 fov-recompute on
@@ -233,11 +242,11 @@ player 6 10 30 3 2 generate-map
 player add-entity
 
 mainloop
+ansi-reset
 
 s" --- cleanup started" logwriteln
 cleanup
 logclose
 
 0 map-height at-xy
-ansi-reset
 bye

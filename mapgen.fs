@@ -79,8 +79,8 @@
     c" healing potion"
     LAYER_ITEM
     0
-    alloc-entity dup dup add-entity
-    \ TODO: heal
+    alloc-entity dup add-entity
+    0 0 add-item
 ;
 
 : place-monster-in-room ( -- )
