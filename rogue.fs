@@ -31,6 +31,7 @@ include inventory.fs
 include item.fs
 include mapgen.fs
 include keys.fs
+include menu.fs
 s" --- included all deps" logwriteln
 
 \ in some versions of gforth, the seed isn't initialised
@@ -136,13 +137,29 @@ variable got-item-count
     else true then
 ;
 
+: add-inventory-string { _en _index -- c-addr }
+    <m
+        [char] ( memit
+        _index [char] a + memit
+        s" ) " mtype
+        _en entity-name@ mtype
+    m> _index add-menu-item
+;
+
+false value input-processor
 : process-input ( -- flag )
+    input-processor execute
+;
+
+defer show-inventory
+:noname ( -- flag )
     \ TODO: numpad 5 counts as k-esc ???
     ekey ekey>char if       \ normal key
         case
             \ k-esc         of haltgame on false endof
             k-q           of haltgame on false endof
             k-g           of get-items-at-player endof
+            k-i           of show-inventory false endof
 
             k-shift-8     of  0 -1 move-cursor endof
             k-shift-6     of  1  0 move-cursor endof
@@ -175,7 +192,52 @@ variable got-item-count
     else                    \ unknown event type
         drop false
     then then
+; constant 'player-turn-input
+
+false value menu-callback
+: reset-input-processor ( -- )
+    false to menu-callback
+    'player-turn-input to input-processor
+    vid-clear
+    fov-recompute on
+    true to ui-update-log
 ;
+
+:noname ( index -- flag )
+    <log
+        s" - using item index: " logtype
+        dup log.
+    log>
+
+    drop    \ TODO
+    reset-input-processor
+    false   \ don't use up turn
+; constant 'use-item-from-inventory
+
+:noname ( -- flag )
+    ekey ekey>char if
+        dup [char] a [char] z within if
+            [char] a - menu-callback execute exit
+        then
+    else drop then
+    reset-input-processor false
+; constant 'menu-input
+
+: set-menu-callback ( 'fn -- )
+    to menu-callback
+    'menu-input to input-processor
+;
+
+:noname ( -- )
+    clear-menu
+    player entity-inventory @ inventory-items @
+    player entity-inventory @ inventory-capacity @ 0 ?do
+        dup @ ?dup-if i add-inventory-string then cell+
+    loop
+
+    s" Choose item to use. Any other button cancels." show-menu
+    'use-item-from-inventory set-menu-callback
+; is show-inventory
 
 : draw-hp-bar ( -- )
     1 msg-log-y
@@ -201,8 +263,8 @@ variable got-item-count
 ;
 
 : show-log-line { _msg _y -- }
-    msg-log-x msg-log-y _y + 0 msg-log-w plot-spaces
-    msg-log-x msg-log-y _y + white 0 _msg count plot-str
+    msg-log-x msg-log-y _y + black msg-log-w plot-spaces
+    msg-log-x msg-log-y _y + white transparent _msg count plot-str
 ;
 
 : draw-ui ( -- )
@@ -220,12 +282,14 @@ variable got-item-count
 ;
 
 : render-all ( -- )
-    clear-all-entities
-    fov-recompute if recompute-fov then
-    render-map
-    fov-recompute off
-    draw-all-entities
-    draw-ui
+    menu-callback 0= if
+        clear-all-entities
+        fov-recompute if recompute-fov then
+        render-map
+        fov-recompute off
+        draw-all-entities
+        draw-ui
+    then
     present
 ;
 
@@ -281,6 +345,7 @@ fov-recompute on
 player 6 10 30 3 2 generate-map
 player add-entity
 
+reset-input-processor
 mainloop
 ansi-reset
 

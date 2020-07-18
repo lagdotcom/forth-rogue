@@ -49,7 +49,7 @@ $1b constant ansi-escape
 ;
 
 \ 256-bit colours
-0 constant black
+0 constant transparent
 1 constant red
 2 constant green
 3 constant yellow
@@ -65,4 +65,5 @@ $1b constant ansi-escape
 13 constant light-magenta
 14 constant light-cyan
 15 constant white
+16 constant black
 92 constant violet

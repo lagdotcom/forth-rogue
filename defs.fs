@@ -47,8 +47,7 @@ struct
 end-struct inventory%
 
 struct
-    cell% field item-flags
-    cell% field item-use-fn
+    cell% field item-use        ( entity -- flag )
 end-struct item%
 
 defer clear-entity

@@ -73,6 +73,10 @@
     'basic-ai add-ai
 ;
 
+: heal-10 ( entity -- flag )
+    10 item-heal
+;
+
 : add-healing-potion ( x y -- )
     [char] ! -rot
     violet
@@ -80,7 +84,7 @@
     LAYER_ITEM
     0
     alloc-entity dup add-entity
-    0 0 add-item
+    ['] heal-10 add-item
 ;
 
 : place-monster-in-room ( -- )

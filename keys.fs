@@ -1,5 +1,6 @@
-char q constant k-q
 char g constant k-g
+char i constant k-i
+char q constant k-q
 
 char 8 constant k-8
 char 6 constant k-6
