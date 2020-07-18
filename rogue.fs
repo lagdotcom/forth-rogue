@@ -36,7 +36,7 @@ s" --- included all deps" logwriteln
 \ in some versions of gforth, the seed isn't initialised
 [IFUNDEF] seed-init
     utime drop seed +! rnd drop
-[ENDIF]
+[THEN]
 
 variable cursor-active  false cursor-active !
 variable cursor-x

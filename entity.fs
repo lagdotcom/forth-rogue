@@ -35,7 +35,7 @@ zero-entities
         [char] @ logemit
         dup hex log. decimal
     log>
-[ENDIF]
+[THEN]
 
     dup ENTITY_NAME_ALLOC and if
         \ entity-name is alloc'd, go back one and free the whole c-addr string
@@ -147,7 +147,7 @@ zero-entities
         _align log. bl logemit
         _size log.
     log>
-[ENDIF]
+[THEN]
 
     _en _'offset execute @ dup 0= if
         drop _align _size %alloc dup

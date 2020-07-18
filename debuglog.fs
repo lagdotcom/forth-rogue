@@ -71,4 +71,4 @@ s" debug.log" w/o create-file throw constant log-file
 : %alloc ( align size -- )
     nip allocate throw
 ;
-[ENDIF]
+[THEN]

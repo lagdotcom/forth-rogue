@@ -193,7 +193,7 @@ nodemap% %size constant nodemap-size
         begin dup node-parent @ root-node nodes-equal 0= while
             [ [IFDEF] debug-bfs ]
                 dup node-xy@ swap . . cr
-            [ [ENDIF] ]
+            [ [THEN] ]
             node-parent @
         repeat
         node-xy@ true
