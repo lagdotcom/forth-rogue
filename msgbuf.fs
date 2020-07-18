@@ -42,3 +42,7 @@ align create msg-log msg-log-size cells allot
 : m. ( str u n -- str u )
     s>d <# #s #> mtype
 ;
+
+: mname ( str u entity -- str u )
+    entity-name@ mtype
+;

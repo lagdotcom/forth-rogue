@@ -10,6 +10,26 @@
     _hp _hp _defense _power fighter!
 ;
 
+:noname { _en -- }
+    _en announce-entity-died
+
+    _en clear-entity
+    _en remove-entity
+
+    \ make a corpse
+    [char] % _en entity-xy@
+    red
+    <m m" remains of " _en mname m>
+    LAYER_CORPSE
+    ENTITY_NAME_ALLOC
+    alloc-entity add-entity
+
+    \ don't free the player, they have special considerations
+    _en player <> if
+        _en free-entity
+    then
+; constant 'entity-died
+
 : damage { _en _amount -- }
     _amount negate _en entity-fighter @ fighter-hp +!
 
@@ -23,24 +43,10 @@
     _victim entity-fighter @ fighter-defense @ -     ( damage )
 
     dup 0> if
-        >r
-        <message
-            _attacker       mname
-            m"  attacks "
-            _victim         mname
-            m"  for "
-            r@              m.
-            m"  damage."
-        message>
-
-        _victim r> damage
+        dup _attacker _victim announce-attack-damage
+        _victim swap damage
     else
         drop
-        <message
-            _attacker       mname
-            m"  attacks "
-            _victim         mname
-            m"  but does no damage."
-        message>
+        _attacker _victim announce-attack-failed
     then
 ;

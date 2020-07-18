@@ -16,11 +16,12 @@ include ansi.fs
 include defs.fs
 include vars.fs
 include utils.fs
-include message.fs
 include rect.fs
 include queue.fs
 include entity.fs
 include actions.fs
+include msgbuf.fs
+include announce.fs
 include map.fs
 include fov.fs
 include vid.fs
@@ -98,15 +99,6 @@ variable cursor-y
     then
 ;
 
-: announce-player-got-item { _slot _en -- }
-<message
-    s" got (" mtype
-    _slot [char] a + memit
-    s" ) " mtype
-    _en entity-name@ mtype
-message>
-;
-
 false value continue-getting-items
 variable got-item-count
 : try-get-item { _en -- }
@@ -119,7 +111,7 @@ variable got-item-count
                     _en remove-entity
                 else
                     false to continue-getting-items
-                    <message s" no room for more items" mtype message>
+                    announce-inventory-full
                 then
             then
         then
@@ -132,8 +124,7 @@ variable got-item-count
     ['] try-get-item for-each-entity
 
     got-item-count @ 0= continue-getting-items and if
-        <message s" nothing to get" mtype message>
-        false
+        announce-get-failed false
     else true then
 ;
 
@@ -340,7 +331,7 @@ entity!
 player 100 2 5 add-fighter
 player 26 add-inventory
 
-vid-clear
+page vid-clear
 fov-recompute on
 player 6 10 30 3 2 generate-map
 player add-entity

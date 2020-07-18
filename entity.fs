@@ -159,10 +159,6 @@ zero-entities
     entity-name@ type
 ;
 
-: mname ( str u entity -- str u )
-    entity-name@ mtype
-;
-
 : entity.debug { _en -- }
     _en entity.name ." (" _en entity-ch @ emit ." ):" cr
     ."   at (" _en entity-xy@ . . ." )" cr
