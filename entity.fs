@@ -27,7 +27,7 @@ zero-entities
     dup _ch _x _y _fg _name _layer _flags entity!
 ;
 
-: free-entity ( entity -- )
+:noname ( entity -- )
 [IFDEF] debug-entity
     <log
         s" free-entity: " logtype
@@ -47,7 +47,7 @@ zero-entities
     dup entity-item maybe-free
 
     free throw
-;
+; is free-entity
 
 : find-entity-offset ( en list -- list+n|0 )
     \ TODO: rewrite to use first-entity-that?

@@ -97,12 +97,52 @@ variable cursor-y
     then
 ;
 
+: announce-player-got-item { _slot _en -- }
+<message
+    s" got (" mtype
+    _slot [char] a + memit
+    s" ) " mtype
+    _en entity-name@ mtype
+message>
+;
+
+false value continue-getting-items
+variable got-item-count
+: try-get-item { _en -- }
+    continue-getting-items if
+        player entity-xy@ _en entity-xy@ d= if
+            _en entity-item @ if
+                _en player swap add-to-inventory if
+                    _en announce-player-got-item
+                    1 got-item-count +!
+                    _en remove-entity
+                else
+                    false to continue-getting-items
+                    <message s" no room for more items" mtype message>
+                then
+            then
+        then
+    then
+;
+
+: get-items-at-player ( -- )
+    0 got-item-count !
+    true to continue-getting-items
+    ['] try-get-item for-each-entity
+
+    got-item-count @ 0= continue-getting-items and if
+        <message s" nothing to get" mtype message>
+        false
+    else true then
+;
+
 : process-input ( -- flag )
     \ TODO: numpad 5 counts as k-esc ???
     ekey ekey>char if       \ normal key
         case
             \ k-esc         of haltgame on false endof
             k-q           of haltgame on false endof
+            k-g           of get-items-at-player endof
 
             k-shift-8     of  0 -1 move-cursor endof
             k-shift-6     of  1  0 move-cursor endof

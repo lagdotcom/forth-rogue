@@ -30,6 +30,11 @@ align create msg-log msg-log-size cells allot
     _buf _buf-count _str-count +
 ;
 
+: memit { _buf _buf-count _ch -- buf buf-count }
+    _ch _buf _buf-count + c!
+    _buf _buf-count 1+
+;
+
 : m" ( str u "message" -- str u )
     [char] " parse postpone sliteral postpone mtype
 ; immediate
