@@ -255,7 +255,9 @@ false value menu-callback
 
 : show-log-line { _msg _y -- }
     msg-log-x msg-log-y _y + black msg-log-w plot-spaces
-    msg-log-x msg-log-y _y + white transparent _msg count plot-str
+    msg-log-x msg-log-y _y +
+    _msg count over @ transparent 2swap     ( fg bg str u )
+    1 /string plot-str
 ;
 
 : draw-ui ( -- )

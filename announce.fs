@@ -1,6 +1,6 @@
 :noname ( s-addr -- )
     \ copy to debug log
-    dup count logwriteln
+    dup count 1 /string logwriteln
     add-to-log
 ; constant 'message
 
@@ -13,13 +13,13 @@
 ;
 
 : announce-entity-died { _en -- }
-<message
+<message _en player = if red else orange then memit
     _en mname
     m"  dies!"
 message> ;
 
 : announce-attack-damage { _damage _attacker _victim -- }
-<message
+<message white memit
     _attacker mname
     m"  attacks "
     _victim mname
@@ -29,7 +29,7 @@ message> ;
 message> ;
 
 : announce-attack-failed { _attacker _victim -- }
-<message
+<message white memit
     _attacker mname
     m"  attacks "
     _victim mname
@@ -37,7 +37,7 @@ message> ;
 message> ;
 
 : announce-player-got-item { _slot _en -- }
-<message
+<message blue memit
     m" got ("
     _slot [char] a + memit
     m" ) "
@@ -46,11 +46,11 @@ message> ;
 message> ;
 
 : announce-inventory-full ( -- )
-<message
+<message yellow memit
     s" no room for more items." mtype
 message> ;
 
 : announce-get-failed ( -- )
-<message
+<message yellow memit
     s" nothing to get." mtype
 message> ;

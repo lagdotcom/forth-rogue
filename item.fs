@@ -9,6 +9,5 @@
 
 : item-heal { _en _amount -- _flag }
     \ TODO
-    2drop
     true
 ;

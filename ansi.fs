@@ -67,3 +67,4 @@ $1b constant ansi-escape
 15 constant white
 16 constant black
 92 constant violet
+202 constant orange
