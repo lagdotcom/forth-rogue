@@ -8,6 +8,12 @@
 ;
 
 : item-heal { _en _amount -- _flag }
-    \ TODO
-    true
+    _en entity-hp@max@ < if
+        _en _amount heal
+        _en announce-healed
+        true
+    else
+        _en announce-cannot-heal-more
+        false
+    then
 ;

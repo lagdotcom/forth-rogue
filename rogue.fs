@@ -196,13 +196,25 @@ false value menu-callback
 
 :noname ( index -- flag )
     <log
-        s" - using item index: " logtype
-        dup log.
+        s" - using item (" logtype
+        dup [char] a + logemit
+        [char] ) logemit
     log>
 
-    drop    \ TODO
-    reset-input-processor
-    false   \ don't use up turn
+    cells player entity-inventory @ inventory-items @ +         ( eaddr )
+    dup @ ?dup-if                                               ( eaddr ent )
+        dup entity-item @ item-use @ ?dup-if                    ( eaddr ent use )
+            player swap execute if                              ( eaddr ent )
+                free-entity                                     ( eaddr )
+                0 swap !                                        ( )
+                true                                            ( T )
+            else 2drop false then                               ( F )
+            reset-input-processor                               ( flag )
+            exit
+        else
+            announce-unusable-item                              ( eaddr )
+        then
+    then drop false
 ; constant 'use-item-from-inventory
 
 :noname ( -- flag )
@@ -281,8 +293,8 @@ false value menu-callback
         render-map
         fov-recompute off
         draw-all-entities
-        draw-ui
     then
+    draw-ui
     present
 ;
 

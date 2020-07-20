@@ -50,3 +50,12 @@
         _attacker _victim announce-attack-failed
     then
 ;
+
+: entity-hp@max@ ( en -- hp max-hp )
+    entity-fighter @ dup fighter-hp @ swap fighter-max-hp @
+;
+
+: heal { _en _amount -- }
+    _en entity-hp@max@ swap _amount + min
+    _en entity-fighter @ fighter-hp !
+;

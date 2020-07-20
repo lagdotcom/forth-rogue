@@ -37,7 +37,7 @@ message> ;
 message> ;
 
 : announce-player-got-item { _slot _en -- }
-<message blue memit
+<message light-blue memit
     m" got ("
     _slot [char] a + memit
     m" ) "
@@ -54,3 +54,28 @@ message> ;
 <message yellow memit
     s" nothing to get." mtype
 message> ;
+
+: announce-unusable-item { _en -- }
+<message yellow memit
+    s" cannot use " mtype
+    _en mname
+message> ;
+
+: announce-healed { _en -- }
+<message
+_en player = if
+    green memit
+    s" you feel better!" mtype
+else
+    red memit
+    _en mname
+    s"  looks better!" mtype
+then message> ;
+
+: announce-cannot-heal-more { _en -- }
+_en player = if
+<message
+    yellow memit
+    s" you're already healthy" mtype
+message>
+then ;
