@@ -142,15 +142,17 @@ false value input-processor
     input-processor execute
 ;
 
-defer show-inventory
+defer choose-item-drop
+defer choose-item-use
 :noname ( -- flag )
     \ TODO: numpad 5 counts as k-esc ???
     ekey ekey>char if       \ normal key
         case
             \ k-esc         of haltgame on false endof
+            k-d           of choose-item-drop false endof
             k-q           of haltgame on false endof
             k-g           of get-items-at-player endof
-            k-i           of show-inventory false endof
+            k-i           of choose-item-use false endof
 
             k-shift-8     of  0 -1 move-cursor endof
             k-shift-6     of  1  0 move-cursor endof
@@ -217,6 +219,24 @@ false value menu-callback
     then drop false
 ; constant 'use-item-from-inventory
 
+:noname ( index -- flag )
+    <log
+        s" - dropping item (" logtype
+        dup [char] a + logemit
+        [char] ) logemit
+    log>
+
+    cells player entity-inventory @ inventory-items @ +         ( eaddr )
+    dup @ ?dup-if                                               ( eaddr ent )
+        >r player entity-xy@                                    ( eaddr x y )
+        r@ entity-y ! r@ entity-x !
+        r@ add-entity
+        r> announce-dropped-item
+        0 swap !
+        reset-input-processor true
+    then drop false
+; constant 'drop-item-from-inventory
+
 :noname ( -- flag )
     ekey ekey>char if
         dup [char] a [char] z within if
@@ -240,7 +260,18 @@ false value menu-callback
 
     s" Choose item to use. Any other button cancels." show-menu
     'use-item-from-inventory set-menu-callback
-; is show-inventory
+; is choose-item-use
+
+:noname ( -- )
+    clear-menu
+    player entity-inventory @ inventory-items @
+    player entity-inventory @ inventory-capacity @ 0 ?do
+        dup @ ?dup-if i add-inventory-string then cell+
+    loop
+
+    s" Choose item to drop. Any other button cancels." show-menu
+    'drop-item-from-inventory set-menu-callback
+; is choose-item-drop
 
 : draw-hp-bar ( -- )
     1 msg-log-y

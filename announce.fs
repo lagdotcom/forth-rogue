@@ -79,3 +79,9 @@ _en player = if
     s" you're already healthy" mtype
 message>
 then ;
+
+: announce-dropped-item { _en -- }
+<message yellow memit
+    s" dropped: " mtype
+    _en mname
+message> ;

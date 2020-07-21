@@ -1,3 +1,4 @@
+char d constant k-d
 char g constant k-g
 char i constant k-i
 char q constant k-q
