@@ -8,6 +8,9 @@ char 6 constant k-6
 char 4 constant k-4
 char 2 constant k-2
 
+    bl constant k-space
+    13 constant k-enter
+
 \ TODO: for accessibility, cursor-lock key?
 char * constant k-shift-8
 char ^ constant k-shift-6

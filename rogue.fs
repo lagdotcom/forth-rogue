@@ -187,13 +187,17 @@ defer choose-item-use
     then then
 ; constant 'player-turn-input
 
+: refresh-ui ( -- )
+    vid-clear
+    fov-recompute on
+    true to ui-update-log
+;
+
 false value menu-callback
 : reset-input-processor ( -- )
     false to menu-callback
     'player-turn-input to input-processor
-    vid-clear
-    fov-recompute on
-    true to ui-update-log
+    refresh-ui
 ;
 
 :noname ( index -- flag )
@@ -258,8 +262,10 @@ false value menu-callback
         dup @ ?dup-if i add-inventory-string then cell+
     loop
 
-    s" Choose item to use. Any other button cancels." show-menu
-    'use-item-from-inventory set-menu-callback
+    menu-items if
+        s" Choose item to use. Any other button cancels." show-menu
+        'use-item-from-inventory set-menu-callback
+    else announce-no-inventory then
 ; is choose-item-use
 
 :noname ( -- )
@@ -269,8 +275,10 @@ false value menu-callback
         dup @ ?dup-if i add-inventory-string then cell+
     loop
 
-    s" Choose item to drop. Any other button cancels." show-menu
-    'drop-item-from-inventory set-menu-callback
+    menu-items if
+        s" Choose item to drop. Any other button cancels." show-menu
+        'drop-item-from-inventory set-menu-callback
+    else announce-no-inventory then
 ; is choose-item-drop
 
 : draw-hp-bar ( -- )
@@ -349,6 +357,63 @@ false value menu-callback
     ['] call-ai for-each-entity
 ;
 
+variable halttargeting
+variable chosetarget
+: process-targeting-input ( -- )
+    ekey ekey>char if       \ normal key
+        case
+            k-q           of halttargeting on endof
+            k-esc         of halttargeting on endof
+            k-enter       of halttargeting on chosetarget on endof
+            k-space       of halttargeting on chosetarget on endof
+
+            k-shift-8     of  0 -1 move-cursor drop endof
+            k-shift-6     of  1  0 move-cursor drop endof
+            k-shift-2     of  0  1 move-cursor drop endof
+            k-shift-4     of -1  0 move-cursor drop endof
+
+            k-8           of  0 -1 move-cursor drop endof
+            k-6           of  1  0 move-cursor drop endof
+            k-2           of  0  1 move-cursor drop endof
+            k-4           of -1  0 move-cursor drop endof
+        endcase
+    else ekey>fkey if       \ meta key
+        case
+            k-shift-up    of  0 -1 move-cursor drop endof
+            k-shift-right of  1  0 move-cursor drop endof
+            k-shift-down  of  0  1 move-cursor drop endof
+            k-shift-left  of -1  0 move-cursor drop endof
+
+            k-up          of  0 -1 move-cursor drop endof
+            k-right       of  1  0 move-cursor drop endof
+            k-down        of  0  1 move-cursor drop endof
+            k-left        of -1  0 move-cursor drop endof
+        endcase
+    else                    \ unknown event type
+        drop
+    then then
+;
+
+:noname ( -- x y 1 | 0 )
+    announce-targeting
+    reset-input-processor
+    halttargeting off
+    chosetarget off
+    player entity-xy@ cursor-xy!
+
+    begin
+        run-actions
+        render-all
+        cursor-xy@ at-xy process-targeting-input
+    halttargeting @ until
+
+    chosetarget @ if
+        cursor-xy@ true
+    else
+        announce-targeting-cancelled false
+    then
+; is get-item-target
+
 : mainloop ( -- )
     haltgame off
     begin
@@ -380,6 +445,7 @@ page vid-clear
 fov-recompute on
 player 6 10 30 3 2 generate-map
 player add-entity
+player entity-xy@ add-fireball-scroll
 
 reset-input-processor
 mainloop

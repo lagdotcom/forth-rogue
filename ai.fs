@@ -59,7 +59,7 @@ map-width map-height make-nodemap constant ai-nodemap
     else 2drop then
 ;
 
-: basic-ai { _en -- }
+:noname { _en -- }
     _en entity-xy@ is-in-fov if
         _en entity-xy@
         player entity-xy@
@@ -74,8 +74,7 @@ map-width map-height make-nodemap constant ai-nodemap
             then
         then
     then
-;
-' basic-ai constant 'basic-ai
+; constant 'basic-ai
 
 : cleanup ( -- )
     s" - freeing AI nodemap" logwriteln

@@ -76,7 +76,6 @@
 : use-healing-potion ( entity -- flag )
     10 item-heal
 ;
-
 : add-healing-potion ( x y -- )
     [char] ! -rot
     violet
@@ -90,7 +89,6 @@
 : use-lightning-scroll ( entity -- flag )
     20 5 item-lightning
 ;
-
 : add-lightning-scroll ( x y -- )
     [char] # -rot
     yellow
@@ -101,6 +99,34 @@
     ['] use-lightning-scroll add-item
 ;
 
+: use-fireball-scroll ( entity -- flag )
+    get-item-target if 12 3 item-fireball
+    else drop false then
+;
+: add-fireball-scroll ( x y -- )
+    [char] # -rot
+    red
+    c" fireball scroll"
+    LAYER_ITEM
+    0
+    alloc-entity dup add-entity
+    ['] use-fireball-scroll add-item
+;
+
+: use-confusion-scroll ( entity -- flag )
+    get-item-target if item-confusion
+    else drop false then
+;
+: add-confusion-scroll ( x y -- )
+    [char] # -rot
+    light-magenta
+    c" confusion scroll"
+    LAYER_ITEM
+    0
+    alloc-entity dup add-entity
+    ['] use-confusion-scroll add-item
+;
+
 : place-monster-in-room ( -- )
     gen-x1 1+ gen-x2 2 - randint
     gen-y1 1+ gen-y2 2 - randint         ( x y )
@@ -108,8 +134,10 @@
         2drop exit
     then
 
-    0 99 randint 80 <
-    if add-orc else add-troll then
+    0 99 randint
+             80 < if      add-orc
+    else                  add-troll
+    then
 ;
 
 : place-item-in-room ( -- )
@@ -119,8 +147,12 @@
         2drop exit
     then
 
-    0 99 randint 70 <
-    if add-healing-potion else add-lightning-scroll then
+    0 99 randint
+         dup 70 < if drop add-healing-potion
+    else dup 80 < if drop add-fireball-scroll
+    else     90 < if      add-confusion-scroll
+    else                  add-lightning-scroll
+    then then then
 ;
 
 : generate-room { _min _max _monsters _items -- }

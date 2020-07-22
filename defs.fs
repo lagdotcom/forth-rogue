@@ -51,5 +51,6 @@ struct
 end-struct item%
 
 defer clear-entity
-defer maybe-free-inventory
 defer free-entity
+defer get-item-target
+defer maybe-free-inventory

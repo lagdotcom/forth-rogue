@@ -95,7 +95,46 @@ message> ;
     m"  damage."
 message> ;
 
-: announce-no-target ( -- )
+: announce-no-nearby-target ( -- )
 <message red memit
     m" no nearby target"
+message> ;
+
+: announce-targeting ( -- )
+<message white memit
+    m" targeting..."
+message> ;
+
+: announce-targeting-cancelled ( -- )
+<message white memit
+    m" cancelled"
+message> ;
+
+: announce-must-target-in-fov ( -- )
+<message yellow memit
+    m" cancelled; cannot target there"
+message> ;
+
+: announce-no-target ( -- )
+<message yellow memit
+    m" cancelled; no target there"
+message> ;
+
+: announce-fireball ( -- )
+<message orange memit
+    m" the fireball explodes!"
+message> ;
+
+: announce-fire-damage { _en _damage -- }
+<message orange memit
+    m" fire scorches "
+    _en mname
+    m"  for "
+    _damage m.
+    m"  damage."
+message> ;
+
+: announce-no-inventory ( -- )
+<message yellow memit
+    m" no items"
 message> ;
