@@ -73,7 +73,7 @@
     'basic-ai add-ai
 ;
 
-: heal-10 ( entity -- flag )
+: use-healing-potion ( entity -- flag )
     10 item-heal
 ;
 
@@ -84,7 +84,21 @@
     LAYER_ITEM
     0
     alloc-entity dup add-entity
-    ['] heal-10 add-item
+    ['] use-healing-potion add-item
+;
+
+: use-lightning-scroll ( entity -- flag )
+    20 5 item-lightning
+;
+
+: add-lightning-scroll ( x y -- )
+    [char] # -rot
+    yellow
+    c" lightning scroll"
+    LAYER_ITEM
+    0
+    alloc-entity dup add-entity
+    ['] use-lightning-scroll add-item
 ;
 
 : place-monster-in-room ( -- )
@@ -105,7 +119,8 @@
         2drop exit
     then
 
-    add-healing-potion
+    0 99 randint 70 <
+    if add-healing-potion else add-lightning-scroll then
 ;
 
 : generate-room { _min _max _monsters _items -- }

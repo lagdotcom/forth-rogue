@@ -17,9 +17,8 @@
     else 2drop false then
 ;
 
-: fdistance { _x1 _y1 _x2 _y2 -- F: dist }
-    _x1 _x2 - dup *
-    _y1 _y2 - dup *
+: distance { _x1 _y1 _x2 _y2 -- dist }
+    _x1 _x2 - abs
+    _y1 _y2 - abs
     +
-    s>d d>f fsqrt
 ;

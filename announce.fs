@@ -47,17 +47,17 @@ message> ;
 
 : announce-inventory-full ( -- )
 <message yellow memit
-    s" no room for more items." mtype
+    m" no room for more items."
 message> ;
 
 : announce-get-failed ( -- )
 <message yellow memit
-    s" nothing to get." mtype
+    m" nothing to get."
 message> ;
 
 : announce-unusable-item { _en -- }
 <message yellow memit
-    s" cannot use " mtype
+    m" cannot use "
     _en mname
 message> ;
 
@@ -65,23 +65,37 @@ message> ;
 <message
 _en player = if
     green memit
-    s" you feel better!" mtype
+    m" you feel better!"
 else
     red memit
     _en mname
-    s"  looks better!" mtype
+    m"  looks better!"
 then message> ;
 
 : announce-cannot-heal-more { _en -- }
 _en player = if
 <message
     yellow memit
-    s" you're already healthy" mtype
+    m" you're already healthy"
 message>
 then ;
 
 : announce-dropped-item { _en -- }
 <message yellow memit
-    s" dropped: " mtype
+    m" dropped: "
     _en mname
+message> ;
+
+: announce-lightning-damage { _en _damage -- }
+<message white memit
+    m" lightning strikes "
+    _en mname
+    m"  for "
+    _damage m.
+    m"  damage."
+message> ;
+
+: announce-no-target ( -- )
+<message red memit
+    m" no nearby target"
 message> ;
