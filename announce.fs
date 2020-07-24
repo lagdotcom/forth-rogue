@@ -150,3 +150,13 @@ message> ;
     _en mname
     m"  looks fine again"
 message> ;
+
+: announce-saved-game ( -- )
+<message green memit
+    m" game saved"
+message> ;
+
+: announce-loaded-game ( -- )
+<message green memit
+    m" game loaded"
+message> ;

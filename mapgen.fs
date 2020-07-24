@@ -73,9 +73,9 @@
     apply-basic-ai
 ;
 
-: use-healing-potion ( entity -- flag )
+:noname ( entity -- flag )
     10 item-heal
-;
+; constant 'use-healing-potion
 : add-healing-potion ( x y -- )
     [char] ! -rot
     violet
@@ -83,12 +83,12 @@
     LAYER_ITEM
     0
     alloc-entity dup add-entity
-    ['] use-healing-potion add-item
+    'use-healing-potion add-item
 ;
 
-: use-lightning-scroll ( entity -- flag )
+:noname ( entity -- flag )
     20 5 item-lightning
-;
+; constant 'use-lightning-scroll
 : add-lightning-scroll ( x y -- )
     [char] # -rot
     yellow
@@ -96,13 +96,13 @@
     LAYER_ITEM
     0
     alloc-entity dup add-entity
-    ['] use-lightning-scroll add-item
+    'use-lightning-scroll add-item
 ;
 
-: use-fireball-scroll ( entity -- flag )
+:noname ( entity -- flag )
     get-item-target if 12 3 item-fireball
     else drop false then
-;
+; constant 'use-fireball-scroll
 : add-fireball-scroll ( x y -- )
     [char] # -rot
     red
@@ -110,13 +110,13 @@
     LAYER_ITEM
     0
     alloc-entity dup add-entity
-    ['] use-fireball-scroll add-item
+    'use-fireball-scroll add-item
 ;
 
-: use-confusion-scroll ( entity -- flag )
+:noname ( entity -- flag )
     get-item-target if 10 item-confusion
     else drop false then
-;
+; constant 'use-confusion-scroll
 : add-confusion-scroll ( x y -- )
     [char] # -rot
     light-magenta
@@ -124,7 +124,18 @@
     LAYER_ITEM
     0
     alloc-entity dup add-entity
-    ['] use-confusion-scroll add-item
+    'use-confusion-scroll add-item
+;
+
+: lookup-item-use ( x -- str u )
+    case
+        'use-healing-potion of s" 'use-healing-potion" endof
+        'use-lightning-scroll of s" 'use-lightning-scroll" endof
+        'use-fireball-scroll of s" 'use-fireball-scroll" endof
+        'use-confusion-scroll of s" 'use-confusion-scroll" endof
+
+        s" 0" rot
+    endcase
 ;
 
 : place-monster-in-room ( -- )
@@ -205,8 +216,23 @@
     loop
 ;
 
+0 value map-seed
+0 value map-min
+0 value map-max
+0 value map-rooms
+0 value map-monsters
+0 value map-items
 : generate-map { _player _min _max _rooms _monsters _items -- }
-    s" -- generating map" logwriteln
+    seed @ to map-seed
+    _min to map-min
+    _max to map-max
+    _rooms to map-rooms
+    _monsters to map-monsters
+    _items to map-items
+    <log
+        s" -- generating map, seed=" logtype
+        map-seed log.
+    log>
 
     rect% _rooms * %alloc to gen-rects
     0 to gen-numrects

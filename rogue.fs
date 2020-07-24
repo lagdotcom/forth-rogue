@@ -33,6 +33,7 @@ include item.fs
 include mapgen.fs
 include keys.fs
 include menu.fs
+include save.fs
 s" --- included all deps" logwriteln
 
 \ in some versions of gforth, the seed isn't initialised
@@ -137,10 +138,18 @@ variable got-item-count
     m> _index add-menu-item
 ;
 
+: refresh-ui ( -- )
+    vid-clear
+    fov-recompute on
+    true to ui-update-log
+;
+
 false value input-processor
 : process-input ( -- flag )
     input-processor execute
 ;
+
+s" _forthrogue.save.fs" 2constant save-filename
 
 defer choose-item-drop
 defer choose-item-use
@@ -153,6 +162,17 @@ defer choose-item-use
             k-q           of haltgame on false endof
             k-g           of get-items-at-player endof
             k-i           of choose-item-use false endof
+            [char] s      of
+                save-filename save-game
+                announce-saved-game
+                false
+            endof
+            [char] l      of
+                save-filename included
+                announce-loaded-game
+                refresh-ui
+                false
+            endof
 
             k-shift-8     of  0 -1 move-cursor endof
             k-shift-6     of  1  0 move-cursor endof
@@ -186,12 +206,6 @@ defer choose-item-use
         drop false
     then then
 ; constant 'player-turn-input
-
-: refresh-ui ( -- )
-    vid-clear
-    fov-recompute on
-    true to ui-update-log
-;
 
 false value menu-callback
 : reset-input-processor ( -- )
