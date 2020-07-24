@@ -445,7 +445,6 @@ page vid-clear
 fov-recompute on
 player 6 10 30 3 2 generate-map
 player add-entity
-player entity-xy@ add-fireball-scroll
 
 reset-input-processor
 mainloop

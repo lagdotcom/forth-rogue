@@ -59,7 +59,7 @@
     ENTITY_BLOCKS
     alloc-entity dup dup add-entity
     10 0 3 add-fighter
-    'basic-ai add-ai
+    apply-basic-ai
 ;
 
 : add-troll ( x y -- )
@@ -70,7 +70,7 @@
     ENTITY_BLOCKS
     alloc-entity dup dup add-entity
     16 1 4 add-fighter
-    'basic-ai add-ai
+    apply-basic-ai
 ;
 
 : use-healing-potion ( entity -- flag )
@@ -114,7 +114,7 @@
 ;
 
 : use-confusion-scroll ( entity -- flag )
-    get-item-target if item-confusion
+    get-item-target if 10 item-confusion
     else drop false then
 ;
 : add-confusion-scroll ( x y -- )

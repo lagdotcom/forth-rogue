@@ -138,3 +138,15 @@ message> ;
 <message yellow memit
     m" no items"
 message> ;
+
+: announce-confused { _en -- }
+<message light-green memit
+    _en mname
+    m"  looks confused"
+message> ;
+
+: announce-confusion-over { _en -- }
+<message red memit
+    _en mname
+    m"  looks fine again"
+message> ;

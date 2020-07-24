@@ -80,14 +80,15 @@
     'apply-fireball for-each-entity true
 ;
 
-: item-confusion { _en _x _y -- flag }
+: item-confusion { _en _x _y _duration -- flag }
     _x _y is-in-fov 0= if
         announce-must-target-in-fov false exit
     then
 
     _x _y get-blocker ?dup-if
-        \ TODO
-        false
+        dup announce-confused
+        _duration apply-confused-ai
+        true
     else
         announce-no-target false
     then

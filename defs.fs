@@ -39,6 +39,9 @@ end-struct fighter%
 
 struct
     cell% field ai-fn           ( entity -- )
+    cell% field ai-free-fn      ( ai -- )
+    cell% field ai-data0
+    cell% field ai-data1
 end-struct ai%
 
 struct
@@ -53,4 +56,5 @@ end-struct item%
 defer clear-entity
 defer free-entity
 defer get-item-target
+defer maybe-free-ai
 defer maybe-free-inventory

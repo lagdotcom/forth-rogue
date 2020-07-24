@@ -34,14 +34,26 @@ map-width map-height make-nodemap constant ai-nodemap
     else true then
 ;
 
-: ai! ( ai fn -- )
-    swap ai-fn !
+: ai! { _ai _fn _free-fn _d0 _d1 -- }
+         _fn _ai ai-fn !
+    _free-fn _ai ai-free-fn !
+         _d0 _ai ai-data0 !
+         _d1 _ai ai-data1 !
 ;
 
-: add-ai { _en _fn -- }
+: add-ai { _en _fn _free-fn _d0 _d1 -- }
     _en ['] entity-ai ai% add-component
-    _fn ai!
+    _fn _free-fn _d0 _d1 ai!
 ;
+
+:noname ( addr -- )
+    dup @ ?dup-if                           ( addr ai )
+        dup ai-free-fn @ ?dup-if            ( addr ai free-fn )
+            execute                         ( addr )
+        else drop then
+        maybe-free
+    else drop then
+; is maybe-free-ai
 
 : move-towards { _en _x _y -- }
     _x _en entity-x @ - sgn     ( mx )
@@ -75,6 +87,43 @@ map-width map-height make-nodemap constant ai-nodemap
         then
     then
 ; constant 'basic-ai
+
+: apply-basic-ai ( en -- )
+    dup entity-ai maybe-free-ai
+    'basic-ai 0 0 0 add-ai
+;
+
+\ confused ai: data0 contains previous ai, data1 contains duration
+
+:noname { _en -- }
+    _en entity-ai @ ai-data1 @ 0> if
+        _en _en entity-xy@          ( en ox oy )
+        swap -1 1 randint +         ( en oy dx )
+        swap -1 1 randint +         ( en dx dy )
+        move-towards
+
+        -1 _en entity-ai @ ai-data1 +!
+    else
+        _en entity-ai @ dup         ( ai ai )
+        ai-data0 @ _en entity-ai !  ( ai )
+        free throw
+        _en announce-confusion-over
+    then
+; constant 'confused-ai
+
+:noname ( ai -- )
+    ai-data0 maybe-free
+; constant 'confused-ai-free
+
+: apply-confused-ai { _en _duration -- }
+    _en
+    'confused-ai
+    'confused-ai-free
+    _en entity-ai @
+        0 _en entity-ai !       \ zero old ai
+    _duration
+    add-ai
+;
 
 : cleanup ( -- )
     s" - freeing AI nodemap" logwriteln

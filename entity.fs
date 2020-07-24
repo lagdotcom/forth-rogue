@@ -42,7 +42,7 @@ zero-entities
         dup entity-name @ 1- free
     then
     dup entity-fighter maybe-free
-    dup entity-ai maybe-free
+    dup entity-ai maybe-free-ai
     dup entity-inventory maybe-free-inventory
     dup entity-item maybe-free
 
