@@ -160,3 +160,8 @@ message> ;
 <message green memit
     m" game loaded"
 message> ;
+
+: announce-new-game ( -- )
+<message white memit
+    m" welcome to forthrogue!"
+message> ;

@@ -167,12 +167,6 @@ defer choose-item-use
                 announce-saved-game
                 false
             endof
-            [char] l      of
-                save-filename included
-                announce-loaded-game
-                refresh-ui
-                false
-            endof
 
             k-shift-8     of  0 -1 move-cursor endof
             k-shift-6     of  1  0 move-cursor endof
@@ -431,7 +425,7 @@ variable chosetarget
 : mainloop ( -- )
     haltgame off
     begin
-        render-all
+        render-all ansi-reset
         handle-player-turn      ( used )
         run-actions
         if
@@ -441,32 +435,70 @@ variable chosetarget
     haltgame @ until
 ;
 
-: get-player-name ( -- c-addr )
-    c" player"
+: start-new-game ( -- )
+    player
+        [char] @ 0 0
+        white
+        c" player"
+        LAYER_PLAYER
+        ENTITY_BLOCKS
+    entity!
+    player 100 2 5 add-fighter
+    player 26 add-inventory
+
+    page vid-clear
+    fov-recompute on
+    player 6 10 30 3 2 generate-map
+    player add-entity
+
+    reset-input-processor
+    announce-new-game run-actions
 ;
 
-player
-    char @ 0 0
-    white
-    get-player-name
-    LAYER_PLAYER
-    ENTITY_BLOCKS
-entity!
-player 100 2 5 add-fighter
-player 26 add-inventory
+: save-exists ( -- flag )
+    save-filename file-status drop
+;
 
-page vid-clear
-fov-recompute on
-player 6 10 30 3 2 generate-map
-player add-entity
+: load-game ( -- flag )
+    save-exists if
+        save-filename included
+        refresh-ui
+        reset-input-processor
+        announce-loaded-game run-actions
+        true
+    else false then
+;
 
-reset-input-processor
-mainloop
-ansi-reset
+: show-main-menu ( -- flag )
+    page clear-menu
+    <m s" (n) new game" mtype m> 0 add-menu-item
+    save-exists if
+        <m s" (l) load" mtype m> 1 add-menu-item
+    then
+    <m s" (q) quit" mtype m> 2 add-menu-item
 
-s" --- cleanup started" logwriteln
-cleanup
-logclose
+    s" forthrogue" show-menu present
+    begin
+        ekey ekey>char if case
+            [char] n of start-new-game true exit endof
+            [char] l of
+                load-game if true exit then
+            endof
+            [char] q of false exit endof
+        endcase else drop then
+    again
+;
 
-0 map-height at-xy
-bye
+:noname ( -- )
+    show-main-menu if
+        mainloop
+    then
+
+    ansi-reset
+    s" --- cleanup started" logwriteln
+    cleanup
+    logclose
+
+    0 map-height at-xy
+    bye
+; execute
