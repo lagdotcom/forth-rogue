@@ -1,3 +1,7 @@
+: map-clear ( -- )
+    game-map map-tiles 0 fill
+;
+
 : map-offset ( x y -- offset )
     map-width * game-map + +
 ;

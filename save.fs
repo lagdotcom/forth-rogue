@@ -31,6 +31,7 @@ defer save-entity
     _fighter fighter-max-hp @ save.
     _fighter fighter-defense @ save.
     _fighter fighter-power @ save.
+    _fighter fighter-xp @ save.
     s" add-fighter" save-ln
 
     _fighter fighter-max-hp @
@@ -88,6 +89,23 @@ defer save-entity
     s"  add-item" save-ln
 ;
 
+: save-stairs { _stairs _en -- }
+    save-indent
+    s" dup " save-type
+    _stairs stairs-floor @ save.
+    s" add-stairs" save-ln
+;
+
+: save-level { _level _en -- }
+    save-indent
+    s" dup " save-type
+    _level level-current @ save.
+    _level level-xp @ save.
+    _level level-base @ save.
+    _level level-factor @ save.
+    s" add-level" save-ln
+;
+
 :noname { _en -- }
     newline save-type
 
@@ -107,6 +125,8 @@ defer save-entity
     _en entity-ai @ ?dup-if _en save-ai then
     _en entity-inventory @ ?dup-if _en save-inventory then
     _en entity-item @ ?dup-if _en save-item then
+    _en entity-stairs @ ?dup-if _en save-stairs then
+    _en entity-level @ ?dup-if _en save-level then
 ; is save-entity
 
 : save-full-entity ( en -- )
@@ -119,6 +139,7 @@ defer save-entity
     w/o create-file throw to save-file
     s" :noname ansi-reset" save-ln
     map-seed save. s" seed !" save-ln
+    dungeon-level save. s" to dungeon-level" save-ln
     s" player " save-type
         map-min save.
         map-max save.

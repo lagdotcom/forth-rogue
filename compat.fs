@@ -9,3 +9,9 @@
     then
 ;
 [THEN]
+
+[IFUNDEF] -!
+: -! ( n addr -- )
+    swap negate swap +!
+;
+[THEN]

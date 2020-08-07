@@ -58,7 +58,7 @@
     LAYER_ENEMY
     ENTITY_BLOCKS
     alloc-entity dup dup add-entity
-    10 0 3 add-fighter
+    10 0 3 35 add-fighter
     apply-basic-ai
 ;
 
@@ -69,7 +69,7 @@
     LAYER_ENEMY
     ENTITY_BLOCKS
     alloc-entity dup dup add-entity
-    16 1 4 add-fighter
+    16 1 4 100 add-fighter
     apply-basic-ai
 ;
 
@@ -81,7 +81,7 @@
     violet
     c" healing potion"
     LAYER_ITEM
-    0
+    ENTITY_SHOULD_REVEAL
     alloc-entity dup add-entity
     'use-healing-potion add-item
 ;
@@ -94,7 +94,7 @@
     yellow
     c" lightning scroll"
     LAYER_ITEM
-    0
+    ENTITY_SHOULD_REVEAL
     alloc-entity dup add-entity
     'use-lightning-scroll add-item
 ;
@@ -108,7 +108,7 @@
     red
     c" fireball scroll"
     LAYER_ITEM
-    0
+    ENTITY_SHOULD_REVEAL
     alloc-entity dup add-entity
     'use-fireball-scroll add-item
 ;
@@ -122,9 +122,19 @@
     light-magenta
     c" confusion scroll"
     LAYER_ITEM
-    0
+    ENTITY_SHOULD_REVEAL
     alloc-entity dup add-entity
     'use-confusion-scroll add-item
+;
+
+: add-down-stairs ( x y -- )
+    [char] > -rot
+    white
+    c" stairs"
+    LAYER_STAIRS
+    ENTITY_SHOULD_REVEAL
+    alloc-entity dup add-entity
+    dungeon-level 1+ add-stairs
 ;
 
 : lookup-item-use ( x -- str u )
@@ -246,6 +256,9 @@
     gen-rects rect@ rect-centre
     _player entity-y !
     _player entity-x !
+
+    gen-rects gen-numrects 1- rect-size * +
+    rect@ rect-centre add-down-stairs
 
     gen-rects free throw
 ;

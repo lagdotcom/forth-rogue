@@ -165,3 +165,34 @@ message> ;
 <message white memit
     m" welcome to forthrogue!"
 message> ;
+
+: announce-no-stairs ( -- )
+<message yellow memit
+    m" no stairs here"
+message> ;
+
+: announce-used-stairs ( -- )
+<message light-violet memit
+    m" you rest, then take the stairs"
+message> ;
+
+: announce-gained-xp { _xp -- }
+<message white memit
+    m" gained xp: "
+    _xp m.
+message> ;
+
+: announce-gained-con ( -- )
+<message gold memit
+    m" you feel more robust"
+message> ;
+
+: announce-gained-str ( -- )
+<message gold memit
+    m" you feel stronger"
+message> ;
+
+: announce-gained-agi ( -- )
+<message gold memit
+    m" you feel quicker"
+message> ;

@@ -4,10 +4,13 @@
 
 1 constant ENTITY_BLOCKS
 2 constant ENTITY_NAME_ALLOC
+4 constant ENTITY_REVEALED
+8 constant ENTITY_SHOULD_REVEAL
 
-1 constant LAYER_CORPSE
-2 constant LAYER_ITEM
-3 constant LAYER_ENEMY
+1 constant LAYER_STAIRS
+2 constant LAYER_CORPSE
+3 constant LAYER_ITEM
+4 constant LAYER_ENEMY
 10 constant LAYER_PLAYER
 
 27 constant k-esc
@@ -43,3 +46,5 @@ cols 1- msg-log-x - constant msg-log-w
 map-height 2 + constant msg-log-y
 
 false value ui-update-log
+
+1 value dungeon-level

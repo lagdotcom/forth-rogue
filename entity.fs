@@ -45,6 +45,7 @@ zero-entities
     dup entity-ai maybe-free-ai
     dup entity-inventory maybe-free-inventory
     dup entity-item maybe-free
+    dup entity-stairs maybe-free
 
     free throw
 ; is free-entity

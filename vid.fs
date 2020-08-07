@@ -96,9 +96,14 @@
     then
 ;
 
+: should-draw-entity { _en -- flag }
+    _en entity-flags @ ENTITY_REVEALED and
+    _en entity-xy@ is-in-fov
+    or
+;
+
 : draw-entity { _en -- }
-    _en entity-xy@
-    is-in-fov if
+    _en should-draw-entity if
     \ <log
     \     s" drawing entity: " logtype
     \     en entity-name@ logtype
@@ -106,6 +111,11 @@
         _en entity-xy@ 2dup
         _en entity-ch @ plot-ch
         _en entity-fg @ plot-fg
+
+        _en entity-flags @ ENTITY_SHOULD_REVEAL and if
+            _en entity-flags @ ENTITY_REVEALED or
+            _en entity-flags !
+        then
     then
 ;
 

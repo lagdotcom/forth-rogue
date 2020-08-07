@@ -11,8 +11,9 @@
     inventory!
 ;
 
-: free-inventory-contents { _inv -- }
-    _inv inventory-items @ _inv inventory-capacity @ 0 ?do
+: free-inventory-contents { _inventory -- }
+    _inventory inventory-items @
+    _inventory inventory-capacity @ 0 ?do
         dup @ ?dup-if                               ( items item? )
             free-entity
             0 over !

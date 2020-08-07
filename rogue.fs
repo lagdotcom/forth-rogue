@@ -30,9 +30,11 @@ include fighter.fs
 include ai.fs
 include inventory.fs
 include item.fs
+include stairs.fs
 include mapgen.fs
 include keys.fs
 include menu.fs
+include level.fs
 include save.fs
 s" --- included all deps" logwriteln
 
@@ -41,7 +43,7 @@ s" --- included all deps" logwriteln
     utime drop seed +! rnd drop
 [THEN]
 
-variable cursor-active  false cursor-active !
+variable cursor-active cursor-active off
 variable cursor-x
 variable cursor-y
 : cursor-bounds-check ( -- )
@@ -73,6 +75,20 @@ variable cursor-y
         player entity-xy@ cursor-xy!
         cursor-xy+!
     then false
+;
+
+:noname { _en -- }
+    player _en = 0= if
+        _en remove-entity
+        _en free-entity
+    then
+; constant 'clear-old-entity
+: generate-next-map ( -- )
+    map-clear
+    page vid-clear
+    fov-recompute on
+    'clear-old-entity for-each-entity
+    player 6 10 30 3 2 generate-map
 ;
 
 : move-player ( mx my -- flag )
@@ -129,20 +145,38 @@ variable got-item-count
     else true then
 ;
 
+variable found-stairs
+:noname { _en -- }
+    player entity-xy@ _en entity-xy@ d= if
+        _en entity-stairs @ ?dup-if
+            player player entity-fighter @ fighter-max-hp @ 2 / heal
+            stairs-floor @ to dungeon-level
+            generate-next-map
+            found-stairs on
+            announce-used-stairs
+        then
+    then
+; constant 'use-stairs
+: try-use-stairs ( -- )
+    found-stairs off
+    'use-stairs for-each-entity
+    found-stairs @ 0= if announce-no-stairs then
+;
+
 : add-inventory-string { _en _index -- c-addr }
     <m
         [char] ( memit
         _index [char] a + memit
-        s" ) " mtype
+        m" ) "
         _en entity-name@ mtype
     m> _index add-menu-item
 ;
 
-: refresh-ui ( -- )
+:noname ( -- )
     vid-clear
     fov-recompute on
     true to ui-update-log
-;
+; is refresh-ui
 
 false value input-processor
 : process-input ( -- flag )
@@ -167,6 +201,7 @@ defer choose-item-use
                 announce-saved-game
                 false
             endof
+            k-enter       of try-use-stairs false endof
 
             k-shift-8     of  0 -1 move-cursor endof
             k-shift-6     of  1  0 move-cursor endof
@@ -321,6 +356,8 @@ false value menu-callback
 
 : draw-ui ( -- )
     draw-hp-bar
+    1 msg-log-y 2 + white transparent s" Floor:" plot-str
+    8 msg-log-y 2 + white transparent <m dungeon-level m. plot-str
 
     ui-update-log if
         msg-log msg-log-size 0 ?do
@@ -436,6 +473,7 @@ variable chosetarget
 ;
 
 : start-new-game ( -- )
+    1 to dungeon-level
     player
         [char] @ 0 0
         white
@@ -443,12 +481,11 @@ variable chosetarget
         LAYER_PLAYER
         ENTITY_BLOCKS
     entity!
-    player 100 2 5 add-fighter
+    player 100 2 5 0 add-fighter
     player 26 add-inventory
+    player 1 0 200 150 add-level
 
-    page vid-clear
-    fov-recompute on
-    player 6 10 30 3 2 generate-map
+    generate-next-map
     player add-entity
 
     reset-input-processor
@@ -471,11 +508,11 @@ variable chosetarget
 
 : show-main-menu ( -- flag )
     page clear-menu
-    <m s" (n) new game" mtype m> 0 add-menu-item
+    <m m" (n) new game" m> 0 add-menu-item
     save-exists if
-        <m s" (l) load" mtype m> 1 add-menu-item
+        <m m" (l) load" m> 1 add-menu-item
     then
-    <m s" (q) quit" mtype m> 2 add-menu-item
+    <m m" (q) quit" m> 2 add-menu-item
 
     s" forthrogue" show-menu present
     begin

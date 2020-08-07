@@ -10,12 +10,19 @@ struct
     cell% field entity-ai
     cell% field entity-inventory
     cell% field entity-item
+    cell% field entity-stairs
+    cell% field entity-level
 end-struct entity%
 entity% %size constant entity-size
 
 : entity-xy@ ( en -- x y )
      dup entity-x @
     swap entity-y @
+;
+
+: entity-xy! { x y _en -- }
+    x _en entity-x !
+    y _en entity-y !
 ;
 
 : entity-name@ ( en -- str u )
@@ -35,6 +42,7 @@ struct
     cell% field fighter-hp
     cell% field fighter-defense
     cell% field fighter-power
+    cell% field fighter-xp
 end-struct fighter%
 
 struct
@@ -53,8 +61,22 @@ struct
     cell% field item-use        ( entity -- flag )
 end-struct item%
 
+struct
+    cell% field stairs-floor
+end-struct stairs%
+
+struct
+    cell% field level-current
+    cell% field level-xp
+    cell% field level-base
+    cell% field level-factor
+end-struct level%
+
+defer add-xp
+defer choose-level-bonus
 defer clear-entity
 defer free-entity
 defer get-item-target
 defer maybe-free-ai
 defer maybe-free-inventory
+defer refresh-ui
