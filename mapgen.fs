@@ -51,82 +51,6 @@
 0 value gen-cx
 0 value gen-cy
 
-: add-orc ( x y -- )
-    [char] o -rot
-    green
-    c" orc"
-    LAYER_ENEMY
-    ENTITY_BLOCKS
-    alloc-entity dup dup add-entity
-    10 0 3 35 add-fighter
-    apply-basic-ai
-;
-
-: add-troll ( x y -- )
-    [char] T -rot
-    light-green
-    c" troll"
-    LAYER_ENEMY
-    ENTITY_BLOCKS
-    alloc-entity dup dup add-entity
-    16 1 4 100 add-fighter
-    apply-basic-ai
-;
-
-:noname ( entity -- flag )
-    10 item-heal
-; constant 'use-healing-potion
-: add-healing-potion ( x y -- )
-    [char] ! -rot
-    violet
-    c" healing potion"
-    LAYER_ITEM
-    ENTITY_SHOULD_REVEAL
-    alloc-entity dup add-entity
-    'use-healing-potion add-item
-;
-
-:noname ( entity -- flag )
-    20 5 item-lightning
-; constant 'use-lightning-scroll
-: add-lightning-scroll ( x y -- )
-    [char] # -rot
-    yellow
-    c" lightning scroll"
-    LAYER_ITEM
-    ENTITY_SHOULD_REVEAL
-    alloc-entity dup add-entity
-    'use-lightning-scroll add-item
-;
-
-:noname ( entity -- flag )
-    get-item-target if 12 3 item-fireball
-    else drop false then
-; constant 'use-fireball-scroll
-: add-fireball-scroll ( x y -- )
-    [char] # -rot
-    red
-    c" fireball scroll"
-    LAYER_ITEM
-    ENTITY_SHOULD_REVEAL
-    alloc-entity dup add-entity
-    'use-fireball-scroll add-item
-;
-
-:noname ( entity -- flag )
-    get-item-target if 10 item-confusion
-    else drop false then
-; constant 'use-confusion-scroll
-: add-confusion-scroll ( x y -- )
-    [char] # -rot
-    light-magenta
-    c" confusion scroll"
-    LAYER_ITEM
-    ENTITY_SHOULD_REVEAL
-    alloc-entity dup add-entity
-    'use-confusion-scroll add-item
-;
-
 : add-down-stairs ( x y -- )
     [char] > -rot
     white
@@ -155,10 +79,7 @@
         2drop exit
     then
 
-    0 99 randint
-             80 < if      add-orc
-    else                  add-troll
-    then
+    get-random-monster execute
 ;
 
 : place-item-in-room ( -- )
@@ -168,15 +89,21 @@
         2drop exit
     then
 
-    0 99 randint
-         dup 70 < if drop add-healing-potion
-    else dup 80 < if drop add-fireball-scroll
-    else     90 < if      add-confusion-scroll
-    else                  add-lightning-scroll
-    then then then
+    get-random-item execute
 ;
 
-: generate-room { _min _max _monsters _items -- }
+table: get-max-monsters ( floor -- max )
+    4 2 rawentry
+    6 3 rawentry
+   -1 4 rawentry
+endtable
+
+table: get-max-items ( floor -- max )
+    4 1 rawentry
+   -1 2 rawentry
+endtable
+
+: generate-room { _min _max -- }
     _min _max randint to gen-w
     _min _max randint to gen-h
     0 map-width gen-w - randint
@@ -217,11 +144,11 @@
 
     gen-numrects 1+ to gen-numrects
 
-    0 _monsters randint 0 ?do
+    0 dungeon-level get-max-monsters randint 0 ?do
         place-monster-in-room
     loop
 
-    0 _items randint 0 ?do
+    0 dungeon-level get-max-items randint 0 ?do
         place-item-in-room
     loop
 ;
@@ -230,15 +157,11 @@
 0 value map-min
 0 value map-max
 0 value map-rooms
-0 value map-monsters
-0 value map-items
-: generate-map { _player _min _max _rooms _monsters _items -- }
+: generate-map { _player _min _max _rooms -- }
     seed @ to map-seed
     _min to map-min
     _max to map-max
     _rooms to map-rooms
-    _monsters to map-monsters
-    _items to map-items
     <log
         s" -- generating map, seed=" logtype
         map-seed log.
@@ -250,7 +173,7 @@
     1 fill-map
 
     _rooms 0 ?do
-        _min _max _monsters _items generate-room
+        _min _max generate-room
     loop
 
     gen-rects rect@ rect-centre

@@ -144,8 +144,6 @@ defer save-entity
         map-min save.
         map-max save.
         map-rooms save.
-        map-monsters save.
-        map-items save.
     s" generate-map free-all-entities" save-ln
 
     ['] save-full-entity for-each-entity

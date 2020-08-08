@@ -31,6 +31,9 @@ include ai.fs
 include inventory.fs
 include item.fs
 include stairs.fs
+include weights.fs
+include items.fs
+include monsters.fs
 include mapgen.fs
 include keys.fs
 include menu.fs
@@ -88,7 +91,7 @@ variable cursor-y
     page vid-clear
     fov-recompute on
     'clear-old-entity for-each-entity
-    player 6 10 30 3 2 generate-map
+    player 6 10 30 generate-map
 ;
 
 : move-player ( mx my -- flag )
@@ -382,8 +385,8 @@ false value menu-callback
 
 : draw-ui ( -- )
     draw-hp-bar
-    1 msg-log-y 2 + white transparent s" Floor:" plot-str
-    8 msg-log-y 2 + white transparent <m dungeon-level m. plot-str
+    1 msg-log-y 2 + white transparent <m m" Floor: " dungeon-level m. plot-str
+    1 msg-log-y 3 + white transparent <m m" Level: " player entity-level @ level-current @ m. plot-str
 
     ui-update-log if
         msg-log msg-log-size 0 ?do
