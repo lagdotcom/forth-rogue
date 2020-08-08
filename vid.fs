@@ -43,6 +43,12 @@
     loop
 ;
 
+: plot-rect { _x _y _w _h _bg -- }
+    _y _h + _y ?do
+        _x i _bg _w plot-spaces
+    loop
+;
+
 : present-offset ( offset -- )
      dup cols /mod at-xy            ( offset )
      dup vidbuf-fg + c@ ansi-fg-256 ( offset )

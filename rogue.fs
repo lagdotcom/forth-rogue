@@ -183,6 +183,27 @@ false value input-processor
     input-processor execute
 ;
 
+: show-character-line { _y _str _str-len -- _y }
+    cs-x _y white transparent _str _str-len plot-str
+    _y 1+
+;
+
+: show-character-screen ( -- )
+    cs-x cs-y cs-width cs-height black plot-rect
+    cs-y 1 +
+
+    s" Character Information" show-character-line 1+
+    <m m" Level: " player entity-level @ level-current @ m. show-character-line
+    <m m" Experience: " player entity-level @ level-xp @ m. show-character-line
+    <m m" Experience to Level: " player to-next-level m. show-character-line
+    <m m" Maximum HP: " player entity-fighter @ fighter-max-hp @ m. show-character-line
+    <m m" Attack: " player entity-fighter @ fighter-power @ m. show-character-line
+    <m m" Defense: " player entity-fighter @ fighter-defense @ m. show-character-line
+
+    drop present
+    ekey drop refresh-ui
+;
+
 s" _forthrogue.save.fs" 2constant save-filename
 
 defer choose-item-drop
@@ -192,8 +213,9 @@ defer choose-item-use
     ekey ekey>char if       \ normal key
         case
             \ k-esc         of haltgame on false endof
-            k-d           of choose-item-drop false endof
             k-q           of haltgame on false endof
+
+            k-d           of choose-item-drop false endof
             k-g           of get-items-at-player endof
             k-i           of choose-item-use false endof
             [char] s      of
@@ -202,6 +224,7 @@ defer choose-item-use
                 false
             endof
             k-enter       of try-use-stairs false endof
+            k-c           of show-character-screen false endof
 
             k-shift-8     of  0 -1 move-cursor endof
             k-shift-6     of  1  0 move-cursor endof
@@ -212,6 +235,9 @@ defer choose-item-use
             k-6           of  1  0 move-player endof
             k-2           of  0  1 move-player endof
             k-4           of -1  0 move-player endof
+
+            k-5           of true endof
+            k-z           of true endof
 
             \ unrecognised key; don't use up player turn
             false swap

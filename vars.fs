@@ -45,6 +45,11 @@ bar-width 2 + constant msg-log-x
 cols 1- msg-log-x - constant msg-log-w
 map-height 2 + constant msg-log-y
 
+30 constant cs-width
+10 constant cs-height
+cols 2 / cs-width 2 / - constant cs-x
+rows 2 / cs-height 2 / - constant cs-y
+
 false value ui-update-log
 
 1 value dungeon-level
