@@ -510,7 +510,7 @@ variable chosetarget
         LAYER_PLAYER
         ENTITY_BLOCKS
     entity!
-    player 100 2 5 0 add-fighter
+    player 100 1 4 0 add-fighter
     player 26 add-inventory
     player 1 0 200 150 add-level
 
