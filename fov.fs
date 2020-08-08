@@ -22,18 +22,18 @@
 0 value ray-x
 0 value ray-y
 0 value ray-err
-: cast-ray { _x0 _y0 _x1 _y1 -- }
-    _x0 to ray-x
-    _y0 to ray-y
-    _x1 _x0 - abs to ray-dx
-    _x0 _x1 < if 1 else -1 then to ray-sx
-    _y1 _y0 - abs negate to ray-dy
-    _y0 _y1 < if 1 else -1 then to ray-sy
+: cast-ray { _x1 _y1 _x2 _y2 -- }
+    _x1 to ray-x
+    _y1 to ray-y
+    _x2 _x1 - abs to ray-dx
+    _x1 _x2 < if 1 else -1 then to ray-sx
+    _y2 _y1 - abs negate to ray-dy
+    _y1 _y2 < if 1 else -1 then to ray-sy
     ray-dx ray-dy + to ray-err
 
     begin
-        ray-x _x0 - abs dup *
-        ray-y _y0 - abs dup * +     ( dx^2+dy^2 )
+        ray-x _x1 - abs dup *
+        ray-y _y1 - abs dup * +     ( dx^2+dy^2 )
         ray-rad2 <=
         ray-x ray-y map-contains and
     while
@@ -43,7 +43,7 @@
             exit
         then
 
-        ray-x _x1 = ray-y _y1 = and if
+        ray-x _x2 = ray-y _y2 = and if
             exit
         then
 

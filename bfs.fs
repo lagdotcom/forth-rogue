@@ -104,24 +104,24 @@ nodemap% %size constant nodemap-size
     loop
 ;
 
-: setup-nodemap { _nodemap _w _h -- }
-    _w _nodemap nodemap-w !
-    _h _nodemap nodemap-h !
+: setup-nodemap { _nodemap _width _height -- }
+    _width _nodemap nodemap-w !
+    _height _nodemap nodemap-h !
     _nodemap setup-nodemap-nodes
 ;
 
-: make-nodemap { _w _h -- nodemap }
-    _w _h nodemap-total-size allocate throw
-    dup _w _h setup-nodemap
+: make-nodemap { _width _height -- nodemap }
+    _width _height nodemap-total-size allocate throw
+    dup _width _height setup-nodemap
 ;
 
 : free-nodemap ( nodemap -- )
     free throw
 ;
 
-: show-nodemap { _w _h _nodemap -- }
-    _h 0 ?do
-        _w 0 ?do
+: show-nodemap { _width _height _nodemap -- }
+    _height 0 ?do
+        _width 0 ?do
             i j _nodemap at-nodemap node-blocked @
             if [char] # else bl then emit
         loop
@@ -185,9 +185,9 @@ nodemap% %size constant nodemap-size
 ;
 
 
-: bfs { _sx _sy _dx _dy _nodemap -- x y true | false }
-    _dx _dy _nodemap at-nodemap to goal-node
-    _sx _sy _nodemap at-nodemap to root-node
+: bfs { _x1 _y1 _x2 _y2 _nodemap -- x y true | false }
+    _x2 _y2 _nodemap at-nodemap to goal-node
+    _x1 _y1 _nodemap at-nodemap to root-node
 
     _nodemap bfs-do if       ( goal )
         begin dup node-parent @ root-node nodes-equal 0= while

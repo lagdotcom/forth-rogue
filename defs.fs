@@ -20,9 +20,9 @@ entity% %size constant entity-size
     swap entity-y @
 ;
 
-: entity-xy! { x y _en -- }
-    x _en entity-x !
-    y _en entity-y !
+: entity-xy! { _x _y _en -- }
+    _x _en entity-x !
+    _y _en entity-y !
 ;
 
 : entity-name@ ( en -- str u )

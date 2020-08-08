@@ -43,9 +43,9 @@
     loop
 ;
 
-: plot-rect { _x _y _w _h _bg -- }
-    _y _h + _y ?do
-        _x i _bg _w plot-spaces
+: plot-rect { _x _y _width _height _bg -- }
+    _y _height + _y ?do
+        _x i _bg _width plot-spaces
     loop
 ;
 

@@ -2,11 +2,11 @@
     c, c, c, c,
 ;
 
-: rect-convert { _x _y _w _h -- x1 y1 x2 y2 }
+: rect-convert { _x _y _width _height -- x1 y1 x2 y2 }
     _x
     _y
-    _x _w +
-    _y _h +
+    _x _width +
+    _y _height +
 ;
 
 : rect@ { _rect -- x1 y1 x2 y2 }

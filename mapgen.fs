@@ -30,13 +30,13 @@
     loop
 ;
 
-: carve-random-tunnel { _px _py _nx _ny -- }
+: carve-random-tunnel { _x1 _y1 _x2 _y2 -- }
     0 1 randint if
-        _px _nx _py carve-h-tunnel
-        _py _ny _nx carve-v-tunnel
+        _x1 _x2 _y1 carve-h-tunnel
+        _y1 _y2 _x2 carve-v-tunnel
     else
-        _py _ny _px carve-v-tunnel
-        _px _nx _ny carve-h-tunnel
+        _y1 _y2 _x1 carve-v-tunnel
+        _x1 _x2 _y2 carve-h-tunnel
     then
 ;
 
