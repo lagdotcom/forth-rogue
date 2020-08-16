@@ -93,3 +93,10 @@
         announce-no-target false
     then
 ;
+
+: item-use@ ( en -- use|0 )
+    dup entity-item @ ?dup-if       ( en item )
+        nip item-use @
+    else drop false
+    then
+;

@@ -4,12 +4,24 @@
     add-to-log
 ; constant 'message
 
+0 value show-announces
+
+: enable-announces ( -- )
+    true to show-announces
+;
+
+: disable-announces ( -- )
+    false to show-announces
+;
+
 : <message ( -- xt str u )
     'message <m
 ;
 
 : message> ( xt str u -- )
-    m> add-action
+    show-announces if
+        m> add-action
+    else drop 2drop then
 ;
 
 : announce-entity-died { _en -- }
@@ -195,4 +207,16 @@ message> ;
 : announce-gained-agi ( -- )
 <message gold memit
     m" you feel quicker"
+message> ;
+
+: announce-equipped-item { _en _enitem -- }
+<message white memit
+    m" equipped: "
+    _enitem mname
+message> ;
+
+: announce-unequipped-item { _en _enitem -- }
+<message white memit
+    m" removed: "
+    _enitem mname
 message> ;

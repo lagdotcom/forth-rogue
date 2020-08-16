@@ -13,7 +13,12 @@
 4 constant LAYER_ENEMY
 10 constant LAYER_PLAYER
 
-27 constant k-esc
+0 equipment-main-hand constant SLOT_MAIN_HAND
+0 equipment-off-hand constant SLOT_OFF_HAND
+
+0 equippable-power-bonus constant BONUS_POWER
+0 equippable-defense-bonus constant BONUS_DEFENSE
+0 equippable-hp-bonus constant BONUS_HP
 
 blue constant dark-wall
 light-blue constant dark-ground

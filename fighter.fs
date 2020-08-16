@@ -44,8 +44,8 @@
 ;
 
 : attack { _attacker _victim -- }
-    _attacker entity-fighter @ fighter-power @       ( power )
-    _victim entity-fighter @ fighter-defense @ -     ( damage )
+    _attacker get-power             ( power )
+    _victim get-defense -           ( damage )
 
     dup 0> if
         dup _attacker _victim announce-attack-damage
@@ -57,7 +57,7 @@
 ;
 
 : entity-hp@max@ ( en -- hp max-hp )
-    entity-fighter @ dup fighter-hp @ swap fighter-max-hp @
+    dup entity-fighter @ fighter-hp @ swap get-max-hp
 ;
 
 : heal { _en _amount -- }

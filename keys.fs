@@ -13,6 +13,7 @@ char 5 constant k-5
 
     bl constant k-space
     13 constant k-enter
+    27 constant k-esc
 
 \ TODO: for accessibility, cursor-lock key?
 char * constant k-shift-8

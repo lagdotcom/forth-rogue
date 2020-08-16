@@ -12,6 +12,8 @@ struct
     cell% field entity-item
     cell% field entity-stairs
     cell% field entity-level
+    cell% field entity-equippable
+    cell% field entity-equipment
 end-struct entity%
 entity% %size constant entity-size
 
@@ -38,11 +40,11 @@ end-struct rect%
 rect% %size constant rect-size
 
 struct
+    cell% field fighter-xp
+    cell% field fighter-power
+    cell% field fighter-defense
     cell% field fighter-max-hp
     cell% field fighter-hp
-    cell% field fighter-defense
-    cell% field fighter-power
-    cell% field fighter-xp
 end-struct fighter%
 
 struct
@@ -72,11 +74,28 @@ struct
     cell% field level-factor
 end-struct level%
 
+struct
+    cell% field equippable-slot
+    cell% field equippable-power-bonus
+    cell% field equippable-defense-bonus
+    cell% field equippable-hp-bonus
+end-struct equippable%
+3 constant equippable-bonuses
+
+struct
+    cell% field equipment-main-hand
+    cell% field equipment-off-hand
+end-struct equipment%
+2 constant equipment-slots
+
 defer add-xp
 defer choose-level-bonus
 defer clear-entity
 defer free-entity
+defer get-defense
 defer get-item-target
+defer get-max-hp
+defer get-power
 defer maybe-free-ai
 defer maybe-free-inventory
 defer refresh-ui

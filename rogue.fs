@@ -29,8 +29,10 @@ include bfs.fs
 include fighter.fs
 include ai.fs
 include inventory.fs
-include item.fs
 include stairs.fs
+include equipment.fs
+include equippable.fs
+include item.fs
 include weights.fs
 include items.fs
 include monsters.fs
@@ -152,7 +154,7 @@ variable found-stairs
 :noname { _en -- }
     player entity-xy@ _en entity-xy@ d= if
         _en entity-stairs @ ?dup-if
-            player player entity-fighter @ fighter-max-hp @ 2 / heal
+            player player get-max-hp 2 / heal
             stairs-floor @ to dungeon-level
             generate-next-map
             found-stairs on
@@ -172,6 +174,12 @@ variable found-stairs
         _index [char] a + memit
         m" ) "
         _en entity-name@ mtype
+        player _en is-equipped if
+            _en equipment-slot@ case
+                SLOT_MAIN_HAND  of m"  (in main hand)" endof
+                SLOT_OFF_HAND   of m"  (in off hand)" endof
+            endcase
+        then
     m> _index add-menu-item
 ;
 
@@ -199,9 +207,9 @@ false value input-processor
     <m m" Level: " player entity-level @ level-current @ m. show-character-line
     <m m" Experience: " player entity-level @ level-xp @ m. show-character-line
     <m m" Experience to Level: " player to-next-level m. show-character-line
-    <m m" Maximum HP: " player entity-fighter @ fighter-max-hp @ m. show-character-line
-    <m m" Attack: " player entity-fighter @ fighter-power @ m. show-character-line
-    <m m" Defense: " player entity-fighter @ fighter-defense @ m. show-character-line
+    <m m" Maximum HP: " player get-max-hp m. show-character-line
+    <m m" Attack: " player get-power m. show-character-line
+    <m m" Defense: " player get-defense m. show-character-line
 
     drop present
     ekey drop refresh-ui
@@ -281,7 +289,7 @@ false value menu-callback
 
     cells player entity-inventory @ inventory-items @ +         ( eaddr )
     dup @ ?dup-if                                               ( eaddr ent )
-        dup entity-item @ item-use @ ?dup-if                    ( eaddr ent use )
+        dup item-use@ ?dup-if                                   ( eaddr ent use )
             player swap execute if                              ( eaddr ent )
                 free-entity                                     ( eaddr )
                 0 swap !                                        ( )
@@ -289,9 +297,13 @@ false value menu-callback
             else 2drop false then                               ( F )
             reset-input-processor                               ( flag )
             exit
+        else dup entity-equippable @ if
+            player swap toggle-equip
+            reset-input-processor
+            true exit
         else
             announce-unusable-item                              ( eaddr )
-        then
+        then then
     then drop false
 ; constant 'use-item-from-inventory
 
@@ -357,7 +369,7 @@ false value menu-callback
     1 msg-log-y
     bar-width
     <#
-        player entity-fighter @ fighter-max-hp @ s>d
+        player get-max-hp s>d
         #s 2drop        \ no longer interested in this number
         [char] / hold
 
@@ -371,7 +383,7 @@ false value menu-callback
         [char] H hold
     #>
     player entity-fighter @ fighter-hp @
-    player entity-fighter @ fighter-max-hp @
+    player get-max-hp
     green red
     draw-bar
 ;
@@ -510,14 +522,23 @@ variable chosetarget
         LAYER_PLAYER
         ENTITY_BLOCKS
     entity!
-    player 100 1 4 0 add-fighter
+    player 100 1 2 0 add-fighter
     player 26 add-inventory
     player 1 0 200 150 add-level
+    player 0 0 add-equipment
+
+    [char] - 0 0 white c" dagger" LAYER_ITEM ENTITY_SHOULD_REVEAL
+    alloc-entity
+        dup SLOT_MAIN_HAND 1 0 0 add-equippable
+        dup 0 add-item
+        player over add-to-inventory 2drop
+    player swap equip
 
     generate-next-map
     player add-entity
 
     reset-input-processor
+    enable-announces
     announce-new-game run-actions
 ;
 
@@ -530,6 +551,7 @@ variable chosetarget
         save-filename included
         refresh-ui
         reset-input-processor
+        enable-announces
         announce-loaded-game run-actions
         true
     else false then

@@ -66,7 +66,9 @@ $1b constant ansi-escape
 14 constant light-cyan
 15 constant white
 16 constant black
+81 constant sky-blue
 92 constant violet
-190 constant gold
-202 constant orange
-207 constant light-violet
+141 constant light-violet
+172 constant dark-orange
+184 constant gold
+214 constant orange
