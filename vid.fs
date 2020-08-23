@@ -49,11 +49,29 @@
     loop
 ;
 
+0 value cursor-x
+0 value cursor-y
+: goto-xy ( x y -- )
+    2dup cursor-x cursor-y d<> if
+        2dup to cursor-y to cursor-x
+        at-xy
+    else 2drop
+    then
+;
+
+: cursor-advance ( -- )
+    cursor-x 1+ dup cols = if
+        cursor-y 1+ to cursor-y
+        drop 0
+    then
+    to cursor-x
+;
+
 : present-offset ( offset -- )
-     dup cols /mod at-xy            ( offset )
+     dup cols /mod goto-xy          ( offset )
      dup vidbuf-fg + c@ ansi-fg-256 ( offset )
      dup vidbuf-bg + c@ ansi-bg-256 ( offset )
-         vidbuf-ch + c@ emit
+         vidbuf-ch + c@ emit cursor-advance
 ;
 
 : present ( -- )
@@ -66,10 +84,16 @@
 ;
 
 : vid-clear ( -- )
-    vidbuf-bg       vidbuf-size chars 0 fill
-    vidbuf-fg       vidbuf-size chars 0 fill
-    vidbuf-ch       vidbuf-size chars bl fill
-    vidbuf-dirty    vidbuf-size chars true fill
+    rows 0 do
+        cols 0 do
+            i j bl plot-ch
+        loop
+    loop
+
+    \ vidbuf-bg       vidbuf-size chars 0 fill
+    \ vidbuf-fg       vidbuf-size chars 0 fill
+    \ vidbuf-ch       vidbuf-size chars bl fill
+    \ vidbuf-dirty    vidbuf-size chars true fill
 ;
 
 : render-map ( -- )
