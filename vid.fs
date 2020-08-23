@@ -87,6 +87,7 @@
     rows 0 do
         cols 0 do
             i j bl plot-ch
+            i j black plot-bg
         loop
     loop
 
